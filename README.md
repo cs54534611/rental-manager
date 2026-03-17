@@ -1,0 +1,1 @@
+微信小程序前端（房源、租客、合同、租金、维修、统计页面） ✅ Node.js + Express 后端 API ✅ MySQL 数据库（已配置好） 启动方式： cd rental-manager/server npm start 然后访问 http://localhost:3000/api/health 检查服务～ 小程序需要用微信开发者工具打开 miniprogram/ 目录，配置一下 AppID 就能跑。
