@@ -15,6 +15,7 @@ const staffRouter = require('./routes/staff');
 const backupRouter = require('./routes/backup');
 const notifyRouter = require('./routes/notify');
 const uploadRouter = require('./routes/upload');
+const authRouter = require('./routes/auth');
 const { scheduleBackup } = require('./backup');
 
 const app = express();
@@ -40,6 +41,7 @@ app.use('/api/staff', staffRouter);
 app.use('/api/backup', backupRouter);
 app.use('/api/notify', notifyRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/auth', authRouter);
 
 // 启用自动备份（每天凌晨2点，保留7天）
 scheduleBackup({ cron: '0 2 * * *', keepCount: 7 });
