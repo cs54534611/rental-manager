@@ -35,5 +35,9 @@ Page({
 
   goToExport() {
     wx.navigateTo({ url: '/pages/stats/index' });
+  },
+
+  goToBackup() {
+    wx.navigateTo({ url: '/pages/backup/index' });
   }
 });

@@ -11,6 +11,8 @@ const repairsRouter = require('./routes/repairs');
 const statsRouter = require('./routes/stats');
 const settingsRouter = require('./routes/settings');
 const staffRouter = require('./routes/staff');
+const backupRouter = require('./routes/backup');
+const { scheduleBackup } = require('./backup');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,6 +31,10 @@ app.use('/api/repairs', repairsRouter);
 app.use('/api/stats', statsRouter);
 app.use('/api/settings', settingsRouter);
 app.use('/api/staff', staffRouter);
+app.use('/api/backup', backupRouter);
+
+// 启用自动备份（每天凌晨2点，保留7天）
+scheduleBackup({ cron: '0 2 * * *', keepCount: 7 });
 
 // 健康检查
 app.get('/api/health', (req, res) => {

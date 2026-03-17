@@ -22,7 +22,8 @@
     "pages/staff/add",
     "pages/settings/index",
     "pages/settings/owner",
-    "pages/settings/remind"
+    "pages/settings/remind",
+    "pages/backup/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

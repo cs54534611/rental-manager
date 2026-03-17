@@ -1,0 +1,45 @@
+<!-- miniprogram/pages/backup/index.wxml -->
+<view class="container">
+  <!-- 自动备份设置 -->
+  <view class="section">
+    <view class="section-title">🔄 自动备份</view>
+    <view class="info-card">
+      <view class="info-row">
+        <text class="label">备份时间</text>
+        <text class="value">每天凌晨 2:00</text>
+      </view>
+      <view class="info-row">
+        <text class="label">保留数量</text>
+        <text class="value">最近 7 份</text>
+      </view>
+      <view class="info-row">
+        <text class="label">存储位置</text>
+        <text class="value">服务器本地</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 手动备份 -->
+  <view class="section">
+    <view class="section-title">📦 手动备份</view>
+    <view class="btn primary" bindtap="onBackup">立即备份</view>
+  </view>
+
+  <!-- 备份记录 -->
+  <view class="section">
+    <view class="section-title">📋 备份记录</view>
+    <view class="list">
+      <view class="item" wx:for="{{list}}" wx:key="filename">
+        <view class="info">
+          <text class="name">{{item.filename}}</text>
+          <text class="size">{{item.size}}</text>
+        </view>
+        <view class="actions">
+          <text class="btn-restore" bindtap="onRestore" data-filename="{{item.filename}}">还原</text>
+          <text class="btn-delete" bindtap="onDelete" data-filename="{{item.filename}}">删除</text>
+        </view>
+      </view>
+      <view wx:if="{{list.length === 0}}" class="empty">暂无备份记录</view>
+    </view>
+  </view>
+</view>
