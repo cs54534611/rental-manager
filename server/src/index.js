@@ -12,6 +12,7 @@ const statsRouter = require('./routes/stats');
 const settingsRouter = require('./routes/settings');
 const staffRouter = require('./routes/staff');
 const backupRouter = require('./routes/backup');
+const notifyRouter = require('./routes/notify');
 const { scheduleBackup } = require('./backup');
 
 const app = express();
@@ -32,9 +33,42 @@ app.use('/api/stats', statsRouter);
 app.use('/api/settings', settingsRouter);
 app.use('/api/staff', staffRouter);
 app.use('/api/backup', backupRouter);
+app.use('/api/notify', notifyRouter);
 
 // 启用自动备份（每天凌晨2点，保留7天）
 scheduleBackup({ cron: '0 2 * * *', keepCount: 7 });
+
+// 定时发送通知（每天早上9点检查并发送提醒）
+setInterval(async () => {
+  const now = new Date();
+  if (now.getHours() === 9 && now.getMinutes() === 0) {
+    try {
+      // 导入db模块发送通知
+      const db = require('./db');
+      // 租金到期提醒
+      await db.query(`
+        INSERT INTO notify_logs (user_id, type, title, content, status, send_time)
+        SELECT t.id, 'rent_due', '租金到期提醒', 
+         CONCAT('您的租金即将到期，请于', r.due_date, '前缴纳租金¥', r.receivable), 1, NOW()
+        FROM rentals r
+        LEFT JOIN tenants t ON r.tenant_id = t.id
+        WHERE r.status = 0 AND r.due_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+      `);
+      // 合同到期提醒
+      await db.query(`
+        INSERT INTO notify_logs (user_id, type, title, content, status, send_time)
+        SELECT t.id, 'contract_expiring', '合同到期提醒',
+         CONCAT('您的合同将于', c.end_date, '到期，请及时处理'), 1, NOW()
+        FROM contracts c
+        LEFT JOIN tenants t ON c.tenant_id = t.id
+        WHERE c.status = 1 AND c.end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+      `);
+      console.log('已发送定时通知提醒');
+    } catch (err) {
+      console.error('定时通知失败:', err);
+    }
+  }
+}, 60000); // 每分钟检查一次
 
 // 健康检查
 app.get('/api/health', (req, res) => {
