@@ -1,0 +1,73 @@
+<!-- miniprogram/pages/houses/detail.wxml -->
+<view class="container">
+  <!-- 轮播图 -->
+  <swiper class="swiper" indicator-dots autoplay circular>
+    <swiper-item wx:for="{{house.photos}}" wx:key="*this">
+      <image src="{{item}}" mode="aspectFill" class="slide-image" />
+    </swiper-item>
+    <swiper-item wx:if="{{!house.photos || house.photos.length === 0}}">
+      <view class="no-photo">
+        <text>暂无照片</text>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 基本信息 -->
+  <view class="card">
+    <view class="header">
+      <text class="address">{{house.community}} - {{house.address}}</text>
+      <text class="status {{house.status}}">{{statusMap[house.status]}}</text>
+    </view>
+    <view class="tags" wx:if="{{house.tags && house.tags.length > 0}}">
+      <text class="tag" wx:for="{{house.tags}}" wx:key="*this">{{item}}</text>
+    </view>
+    
+    <view class="info-grid">
+      <view class="info-item">
+        <text class="label">户型</text>
+        <text class="value">{{house.layout}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">面积</text>
+        <text class="value">{{house.area}}㎡</text>
+      </view>
+      <view class="info-item">
+        <text class="label">楼层</text>
+        <text class="value">{{house.floor}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">朝向</text>
+        <text class="value">{{house.orientation}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">装修</text>
+        <text class="value">{{house.decoration}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">月租</text>
+        <text class="value primary">¥{{house.rent}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 配套设施 -->
+  <view class="card" wx:if="{{house.facilities && house.facilities.length > 0}}">
+    <view class="card-title">配套设施</view>
+    <view class="facilities">
+      <text class="facility" wx:for="{{house.facilities}}" wx:key="*this">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 备注 -->
+  <view class="card" wx:if="{{house.remark}}">
+    <view class="card-title">备注</view>
+    <text class="remark">{{house.remark}}</text>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-bar">
+    <view class="btn primary" bindtap="onUploadPhoto">上传照片</view>
+    <view class="btn edit" bindtap="onEdit">编辑</view>
+    <view class="btn delete" bindtap="onDelete">删除</view>
+  </view>
+</view>

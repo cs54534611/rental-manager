@@ -1,0 +1,22 @@
+<!-- miniprogram/pages/staff/add.wxml -->
+<view class="container">
+  <view class="form">
+    <view class="form-item">
+      <text class="label">姓名 *</text>
+      <input class="input" placeholder="请输入姓名" model:value="{{name}}" />
+    </view>
+    <view class="form-item">
+      <text class="label">电话 *</text>
+      <input class="input" type="number" placeholder="请输入电话" model:value="{{phone}}" />
+    </view>
+    <view class="form-item">
+      <text class="label">专长</text>
+      <input class="input" placeholder="如：水电维修" model:value="{{specialty}}" />
+    </view>
+    <view class="form-item">
+      <text class="label">备注</text>
+      <textarea class="textarea" placeholder="请输入备注" model:value="{{remark}}" />
+    </view>
+    <view class="submit-btn" bindtap="onSubmit">保存</view>
+  </view>
+</view>

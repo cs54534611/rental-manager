@@ -1,0 +1,62 @@
+<!-- miniprogram/pages/contracts/detail.wxml -->
+<view class="container">
+  <view class="card">
+    <view class="header">
+      <text class="no">{{contract.contract_no}}</text>
+      <text class="status {{contract.status}}">{{contract.status===1?'生效中':'已终止'}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">房源信息</view>
+    <view class="info-row">
+      <text class="label">房源</text>
+      <text class="value">{{contract.community}} - {{contract.address}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">户型</text>
+      <text class="value">{{contract.layout}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">租客信息</view>
+    <view class="info-row">
+      <text class="label">租客</text>
+      <text class="value">{{contract.tenant_name}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">电话</text>
+      <text class="value">{{contract.tenant_phone}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">合同信息</view>
+    <view class="info-row">
+      <text class="label">合同类型</text>
+      <text class="value">{{typeMap[contract.type]}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">租期</text>
+      <text class="value">{{contract.start_date}} ~ {{contract.end_date}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">月租金</text>
+      <text class="value primary">¥{{contract.monthly_rent}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">付款方式</text>
+      <text class="value">{{paymentMethodMap[contract.payment_method]}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">押金</text>
+      <text class="value">¥{{contract.deposit}}</text>
+    </view>
+  </view>
+
+  <view class="action-bar" wx:if="{{contract.status===1}}">
+    <view class="btn primary" bindtap="onRenew">续签</view>
+    <view class="btn terminate" bindtap="onTerminate">终止</view>
+  </view>
+</view>

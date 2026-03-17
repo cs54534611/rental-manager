@@ -1,0 +1,51 @@
+<!-- miniprogram/pages/tenants/add.wxml -->
+<view class="container">
+  <view class="form">
+    <view class="form-section">
+      <view class="form-title">基本信息</view>
+      
+      <view class="form-item">
+        <text class="label">姓名 *</text>
+        <input class="input" placeholder="请输入姓名" model:value="{{name}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">性别 *</text>
+        <picker mode="selector" range="{{genders}}" bindchange="onGenderChange">
+          <view class="picker">{{genders[gender] || '请选择'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">手机号 *</text>
+        <input class="input" type="number" placeholder="请输入手机号" model:value="{{phone}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">身份证号</text>
+        <input class="input" placeholder="请输入身份证号" model:value="{{id_card}}" />
+      </view>
+    </view>
+
+    <view class="form-section">
+      <view class="form-title">紧急联系人</view>
+      
+      <view class="form-item">
+        <text class="label">联系人</text>
+        <input class="input" placeholder="请输入紧急联系人" model:value="{{emergency_contact}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">联系电话</text>
+        <input class="input" type="number" placeholder="请输入联系电话" model:value="{{emergency_phone}}" />
+      </view>
+    </view>
+
+    <view class="form-section">
+      <view class="form-title">备注</view>
+      <textarea class="textarea" placeholder="请输入备注" model:value="{{remark}}" />
+    </view>
+
+    <view class="submit-btn" bindtap="onSubmit">保存</view>
+  </view>
+</view>

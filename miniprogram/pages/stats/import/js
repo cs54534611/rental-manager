@@ -1,0 +1,169 @@
+// miniprogram/pages/stats/import.js
+const app = getApp();
+
+Page({
+  data: {
+    importType: '',
+    previewData: [],
+    previewHeaders: []
+  },
+
+  onLoad(options) {
+    if (options.type) {
+      this.setData({ importType: options.type });
+    }
+  },
+
+  // 下载模板
+  async downloadTemplate(e) {
+    const type = e.currentTarget.dataset.type;
+    wx.showLoading({ title: '下载中...' });
+    
+    try {
+      const res = await app.request({ 
+        url: '/stats/import/template/' + type,
+        responseType: 'text'
+      });
+      
+      const fs = wx.getFileSystemManager();
+      const filePath = wx.env.USER_DATA_PATH + '/' + type + '_template.csv';
+      
+      fs.writeFile({
+        filePath: filePath,
+        data: res.data,
+        encoding: 'utf8',
+        success: () => {
+          wx.hideLoading();
+          wx.showToast({ title: '模板已保存' });
+          setTimeout(() => {
+            wx.openDocument({ filePath: filePath });
+          }, 500);
+        },
+        fail: () => {
+          wx.hideLoading();
+          wx.showToast({ title: '保存失败', icon: 'none' });
+        }
+      });
+    } catch (err) {
+      wx.hideLoading();
+      wx.showToast({ title: '下载失败', icon: 'none' });
+    }
+  },
+
+  // 选择文件
+  chooseFile() {
+    wx.chooseMessageFile({
+      count: 1,
+      type: 'file',
+      extension: ['csv'],
+      success: (res) => {
+        this.parseCSV(res.tempFiles[0].path);
+      }
+    });
+  },
+
+  // 解析CSV
+  parseCSV(filePath) {
+    const fs = wx.getFileSystemManager();
+    fs.readFile({
+      filePath: filePath,
+      encoding: 'utf8',
+      success: (res) => {
+        const lines = res.data.split('\n').filter(l => l.trim());
+        if (lines.length < 2) {
+          wx.showToast({ title: '文件为空', icon: 'none' });
+          return;
+        }
+        
+        // 解析表头
+        const headers = this.parseCSVLine(lines[0]);
+        
+        // 解析数据
+        const data = [];
+        for (let i = 1; i < lines.length; i++) {
+          const values = this.parseCSVLine(lines[i]);
+          if (values.length > 0) {
+            const row = {};
+            headers.forEach((h, idx) => { row[h] = values[idx] || ''; });
+            data.push(row);
+          }
+        }
+        
+        this.setData({
+          previewHeaders: headers,
+          previewData: data.slice(0, 10) // 只显示前10条
+        });
+      },
+      fail: () => {
+        wx.showToast({ title: '读取失败', icon: 'none' });
+      }
+    });
+  },
+
+  parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    result.push(current.trim());
+    return result;
+  },
+
+  // 清除预览
+  clearPreview() {
+    this.setData({ previewData: [], previewHeaders: [] });
+  },
+
+  // 确认导入
+  async confirmImport() {
+    const data = this.data.previewData;
+    let type = this.data.importType;
+    
+    if (!type) {
+      // 根据表头判断类型
+      const headers = this.data.previewHeaders;
+      if (headers.includes('月租金') || headers.includes('合同编号')) type = 'contracts';
+      else if (headers.includes('租金') || headers.includes('押金')) type = 'houses';
+      else if (headers.includes('身份证')) type = 'tenants';
+      else type = 'houses';
+    }
+    
+    wx.showLoading({ title: '导入中...' });
+    
+    try {
+      let key = type;
+      if (type === 'contracts') key = 'contracts';
+      else if (type === 'houses') key = 'houses';
+      else if (type === 'tenants') key = 'tenants';
+      
+      const res = await app.request({
+        url: '/stats/import/' + key,
+        method: 'POST',
+        data: { [key]: data }
+      });
+      
+      wx.hideLoading();
+      wx.showToast({ title: res.message || '导入成功' });
+      
+      if (res.code === 0) {
+        setTimeout(() => {
+          wx.navigateBack();
+        }, 1500);
+      }
+    } catch (err) {
+      wx.hideLoading();
+      wx.showToast({ title: '导入失败', icon: 'none' });
+    }
+  }
+});

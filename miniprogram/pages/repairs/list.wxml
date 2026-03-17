@@ -1,0 +1,33 @@
+<!-- miniprogram/pages/repairs/list.wxml -->
+<view class="container">
+  <!-- 筛选 -->
+  <view class="filter-bar">
+    <view class="filter-item {{status===''?'active':''}}" bindtap="onFilter" data-status="">全部</view>
+    <view class="filter-item {{status===0?'active':''}}" bindtap="onFilter" data-status="0">待受理</view>
+    <view class="filter-item {{status>=1&&status<5?'active':''}}" bindtap="onFilter" data-status="1">处理中</view>
+    <view class="filter-item {{status>=5?'active':''}}" bindtap="onFilter" data-status="5">已完成</view>
+  </view>
+
+  <!-- 列表 -->
+  <scroll-view scroll-y class="list">
+    <view class="item" wx:for="{{repairs}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+      <view class="item-header">
+        <text class="no">{{item.repair_no}}</text>
+        <text class="urgency {{item.urgency}}">{{urgencyMap[item.urgency]}}</text>
+      </view>
+      <view class="item-body">
+        <text class="address">{{item.community}} - {{item.address}}</text>
+        <text class="type">{{typeMap[item.type]}}</text>
+      </view>
+      <view class="item-desc">{{item.description}}</view>
+      <view class="item-footer">
+        <text class="date">{{item.created_at}}</text>
+        <text class="status {{item.status}}">{{statusMap[item.status]}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{repairs.length===0}}" class="empty">暂无报修</view>
+  </scroll-view>
+
+  <view class="add-btn" bindtap="goToAdd">➕ 提交报修</view>
+</view>

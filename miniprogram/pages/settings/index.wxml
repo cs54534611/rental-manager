@@ -1,0 +1,38 @@
+<!-- miniprogram/pages/settings/index.wxml -->
+<view class="container">
+  <!-- 房东信息 -->
+  <view class="profile-card">
+    <view class="avatar">{{owner.name[0] || '房'}}</view>
+    <view class="info">
+      <text class="name">{{owner.name || '房东'}}</text>
+      <text class="phone">{{owner.phone || '未设置手机号'}}</text>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="menu-list">
+    <view class="menu-item" bindtap="goToEdit">
+      <text>房东信息</text>
+      <text class="arrow">></text>
+    </view>
+    <view class="menu-item" bindtap="goToRemind">
+      <text>租金提醒</text>
+      <text class="arrow">></text>
+    </view>
+    <view class="menu-item" bindtap="goToStaff">
+      <text>维修人员管理</text>
+      <text class="arrow">></text>
+    </view>
+    <view class="menu-item" bindtap="goToExport">
+      <text>数据导出</text>
+      <text class="arrow">></text>
+    </view>
+  </view>
+
+  <view class="menu-list">
+    <view class="menu-item">
+      <text>版本号</text>
+      <text class="version">v1.0.0</text>
+    </view>
+  </view>
+</view>

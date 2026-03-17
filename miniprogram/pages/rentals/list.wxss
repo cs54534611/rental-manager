@@ -1,0 +1,113 @@
+/* miniprogram/pages/rentals/list.wxss */
+page { background: #f5f7fa; }
+.container { padding: 20rpx; }
+
+.filter-bar {
+  display: flex;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+.filter-item {
+  padding: 10rpx 30rpx;
+  background: white;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+.filter-item.active {
+  background: #667eea;
+  color: white;
+}
+
+.stats-card {
+  display: flex;
+  background: white;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+.stats-card .stat {
+  flex: 1;
+  text-align: center;
+}
+.stats-card .label {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+.stats-card .value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+.stats-card .value.warning { color: #f59e0b; }
+
+.list {
+  height: calc(100vh - 340rpx);
+}
+
+.item {
+  background: white;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+.period { font-size: 28rpx; font-weight: 600; color: #333; }
+.status { font-size: 24rpx; padding: 4rpx 12rpx; border-radius: 6rpx; }
+.status[status="0"] { background: #fee2e2; color: #dc2626; }
+.status[status="1"] { background: #d1fae5; color: #059669; }
+.status[status="2"] { background: #fee2e2; color: #dc2626; }
+
+.item-body {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+.address { font-size: 26rpx; color: #666; }
+.tenant { font-size: 26rpx; color: #333; }
+
+.item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.money { display: flex; gap: 20rpx; }
+.receivable { font-size: 26rpx; color: #666; }
+.actual { font-size: 26rpx; color: #10b981; font-weight: 600; }
+
+.action {
+  padding: 10rpx 30rpx;
+  background: #667eea;
+  color: white;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+}
+
+.empty {
+  text-align: center;
+  padding: 100rpx;
+  color: #999;
+}
+
+.add-btn {
+  position: fixed;
+  bottom: 40rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 40rpx;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+}

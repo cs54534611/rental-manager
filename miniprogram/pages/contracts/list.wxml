@@ -1,0 +1,41 @@
+<!-- miniprogram/pages/contracts/list.wxml -->
+<view class="container">
+  <!-- 筛选 -->
+  <view class="filter-bar">
+    <view class="filter-item {{status===''?'active':''}}" bindtap="onFilter" data-status="">全部</view>
+    <view class="filter-item {{status===1?'active':''}}" bindtap="onFilter" data-status="1">生效中</view>
+    <view class="filter-item {{status===0?'active':''}}" bindtap="onFilter" data-status="0">已终止</view>
+  </view>
+
+  <!-- 列表 -->
+  <scroll-view scroll-y class="list">
+    <view class="item" wx:for="{{contracts}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+      <view class="item-header">
+        <text class="no">{{item.contract_no}}</text>
+        <text class="status {{item.status}}">{{item.status===1?'生效中':'已终止'}}</text>
+      </view>
+      <view class="item-body">
+        <view class="row">
+          <text class="label">房源：</text>
+          <text class="value">{{item.community}} - {{item.address}}</text>
+        </view>
+        <view class="row">
+          <text class="label">租客：</text>
+          <text class="value">{{item.tenant_name}} · {{item.tenant_phone}}</text>
+        </view>
+        <view class="row">
+          <text class="label">租期：</text>
+          <text class="value">{{item.start_date}} ~ {{item.end_date}}</text>
+        </view>
+      </view>
+      <view class="item-footer">
+        <text class="rent">¥{{item.monthly_rent}}/月</text>
+        <text class="method">{{paymentMethodMap[item.payment_method]}}</text>
+      </view>
+    </view>
+
+    <view wx:if="{{contracts.length===0}}" class="empty">暂无合同</view>
+  </scroll-view>
+
+  <view class="add-btn" bindtap="goToAdd">➕ 新建合同</view>
+</view>

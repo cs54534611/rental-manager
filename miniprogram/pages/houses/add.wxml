@@ -1,0 +1,107 @@
+<!-- miniprogram/pages/houses/add.wxml -->
+<view class="container">
+  <view class="form">
+    <!-- 基本信息 -->
+    <view class="form-section">
+      <view class="form-title">基本信息</view>
+      
+      <!-- 房源照片 -->
+      <view class="form-item">
+        <text class="label">房源照片</text>
+        <view class="photo-grid">
+          <view class="photo-item" wx:for="{{photos}}" wx:key="*this">
+            <image src="{{item}}" mode="aspectFill" />
+            <view class="photo-delete" bindtap="deletePhoto" data-index="{{index}}">×</view>
+          </view>
+          <view class="photo-add" bindtap="addPhoto" wx:if="{{photos.length < 9}}">
+            <text>+</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">小区名称 *</text>
+        <input class="input" placeholder="请输入小区名称" model:value="{{community}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">详细地址 *</text>
+        <input class="input" placeholder="请输入详细地址" model:value="{{address}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">户型 *</text>
+        <picker mode="selector" range="{{layouts}}" bindchange="onLayoutChange">
+          <view class="picker">{{layout || '请选择户型'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">面积(㎡) *</text>
+        <input class="input" type="digit" placeholder="请输入面积" model:value="{{area}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">楼层</text>
+        <view class="floor-input">
+          <input class="input" type="number" placeholder="当前楼层" model:value="{{floor}}" />
+          <text>/</text>
+          <input class="input" type="number" placeholder="总楼层" model:value="{{totalFloor}}" />
+        </view>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">朝向 *</text>
+        <picker mode="selector" range="{{orientations}}" bindchange="onOrientationChange">
+          <view class="picker">{{orientation || '请选择朝向'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">装修情况 *</text>
+        <picker mode="selector" range="{{decorations}}" bindchange="onDecorationChange">
+          <view class="picker">{{decoration || '请选择装修情况'}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 租金信息 -->
+    <view class="form-section">
+      <view class="form-title">租金信息</view>
+      
+      <view class="form-item">
+        <text class="label">月租金(元) *</text>
+        <input class="input" type="digit" placeholder="请输入月租金" model:value="{{rent}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">押金(元) *</text>
+        <input class="input" type="digit" placeholder="请输入押金金额" model:value="{{deposit}}" />
+      </view>
+    </view>
+
+    <!-- 配套设施 -->
+    <view class="form-section">
+      <view class="form-title">配套设施</view>
+      <view class="checkbox-group">
+        <view class="checkbox-item {{facilities.includes(item)?'checked':''}}" 
+              wx:for="{{facilityOptions}}" 
+              wx:key="*this" 
+              wx:for-index="idx"
+              bindtap="toggleFacility" 
+              data-idx="{{idx}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-section">
+      <view class="form-title">备注</view>
+      <textarea class="textarea" placeholder="请输入备注信息" model:value="{{remark}}" />
+    </view>
+
+    <!-- 提交按钮 -->
+    <view class="submit-btn" bindtap="onSubmit">保存房源</view>
+  </view>
+</view>

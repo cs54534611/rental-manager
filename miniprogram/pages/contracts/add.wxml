@@ -1,0 +1,71 @@
+<!-- miniprogram/pages/contracts/add.wxml -->
+<view class="container">
+  <view class="form">
+    <!-- 房源选择 -->
+    <view class="form-section">
+      <view class="form-title">选择房源 *</view>
+      <picker mode="selector" range="{{houses}}" range-key="label" bindchange="onHouseChange">
+        <view class="picker">{{selectedHouse ? selectedHouse.label : '请选择房源'}}</view>
+      </picker>
+    </view>
+
+    <!-- 租客选择 -->
+    <view class="form-section">
+      <view class="form-title">选择租客 *</view>
+      <picker mode="selector" range="{{tenants}}" range-key="name" bindchange="onTenantChange">
+        <view class="picker">{{selectedTenant ? selectedTenant.name : '请选择租客'}}</view>
+      </picker>
+    </view>
+
+    <!-- 合同信息 -->
+    <view class="form-section">
+      <view class="form-title">合同信息</view>
+      
+      <view class="form-item">
+        <text class="label">合同类型 *</text>
+        <picker mode="selector" range="{{types}}" bindchange="onTypeChange">
+          <view class="picker">{{types[type] || '请选择'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">开始日期 *</text>
+        <picker mode="date" value="{{start_date}}" bindchange="onStartDateChange">
+          <view class="picker">{{start_date || '请选择'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">结束日期 *</text>
+        <picker mode="date" value="{{end_date}}" bindchange="onEndDateChange">
+          <view class="picker">{{end_date || '请选择'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">月租金 *</text>
+        <input class="input" type="digit" placeholder="请输入月租金" model:value="{{monthly_rent}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">付款方式 *</text>
+        <picker mode="selector" range="{{paymentMethods}}" bindchange="onPaymentChange">
+          <view class="picker">{{paymentMethods[payment_method] || '请选择'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">押金 *</text>
+        <input class="input" type="digit" placeholder="请输入押金" model:value="{{deposit}}" />
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-section">
+      <view class="form-title">备注</view>
+      <textarea class="textarea" placeholder="请输入备注" model:value="{{remark}}" />
+    </view>
+
+    <view class="submit-btn" bindtap="onSubmit">保存合同</view>
+  </view>
+</view>

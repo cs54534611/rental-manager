@@ -1,0 +1,65 @@
+<!-- miniprogram/pages/rentals/add.wxml -->
+<view class="container">
+  <view class="form">
+    <!-- 租金期间 -->
+    <view class="form-section">
+      <view class="form-title">租金信息</view>
+      
+      <view class="form-item">
+        <text class="label">租金期间 *</text>
+        <picker mode="date" fields="month" value="{{period}}" bindchange="onPeriodChange">
+          <view class="picker">{{period || '请选择月份'}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 合同选择 -->
+    <view class="form-section">
+      <view class="form-title">选择合同 *</view>
+      <picker mode="selector" range="{{contracts}}" range-key="label" bindchange="onContractChange">
+        <view class="picker">{{selectedContract ? selectedContract.label : '请选择合同'}}</view>
+      </picker>
+      <view class="contract-info" wx:if="{{selectedContract}}">
+        <text>{{selectedContract.house}} - {{selectedContract.tenant}}</text>
+        <text class="rent">月租: ¥{{selectedContract.monthly_rent}}</text>
+      </view>
+    </view>
+
+    <!-- 收款信息 -->
+    <view class="form-section">
+      <view class="form-title">收款信息</view>
+      
+      <view class="form-item">
+        <text class="label">应收金额 *</text>
+        <input class="input" type="digit" placeholder="请输入应收金额" model:value="{{receivable}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">实收金额 *</text>
+        <input class="input" type="digit" placeholder="请输入实收金额" model:value="{{actual}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">付款方式 *</text>
+        <picker mode="selector" range="{{paymentMethods}}" bindchange="onPaymentChange">
+          <view class="picker">{{paymentMethods[payment_method] || '请选择'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">付款日期 *</text>
+        <picker mode="date" value="{{paid_date}}" bindchange="onPaidDateChange">
+          <view class="picker">{{paid_date || '请选择日期'}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-section">
+      <view class="form-title">备注</view>
+      <textarea class="textarea" placeholder="请输入备注" model:value="{{remark}}" />
+    </view>
+
+    <view class="submit-btn" bindtap="onSubmit">确认收款</view>
+  </view>
+</view>

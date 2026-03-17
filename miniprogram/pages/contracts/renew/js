@@ -1,0 +1,87 @@
+// miniprogram/pages/contracts/renew.js
+const app = getApp();
+
+Page({
+  data: {
+    contractId: '',
+    contract: null,
+    monthly_rent: '',
+    payment_method: 0,
+    deposit: '',
+    start_date: '',
+    end_date: '',
+    remark: '',
+    paymentMethods: ['月付', '季付', '半年付', '年付']
+  },
+
+  onLoad(options) {
+    if (options.id) {
+      this.setData({ contractId: options.id });
+      this.loadContract(options.id);
+    }
+  },
+
+  async loadContract(id) {
+    try {
+      const res = await app.request({ url: '/contracts/' + id });
+      const c = res.data;
+      this.setData({
+        contract: c,
+        monthly_rent: c.monthly_rent,
+        payment_method: c.payment_method,
+        deposit: c.deposit,
+        start_date: c.end_date,
+        end_date: this.addYears(c.end_date, 1)
+      });
+    } catch (err) {
+      wx.showToast({ title: '加载失败', icon: 'none' });
+    }
+  },
+
+  addYears(dateStr, years) {
+    const d = new Date(dateStr);
+    d.setFullYear(d.getFullYear() + years);
+    return d.toISOString().split('T')[0];
+  },
+
+  onPaymentChange(e) {
+    this.setData({ payment_method: parseInt(e.detail.value) });
+  },
+
+  onStartDateChange(e) {
+    this.setData({ start_date: e.detail.value });
+  },
+
+  onEndDateChange(e) {
+    this.setData({ end_date: e.detail.value });
+  },
+
+  async onSubmit() {
+    const d = this.data;
+    if (!d.monthly_rent || !d.deposit || !d.start_date || !d.end_date) {
+      return wx.showToast({ title: '请填写完整信息', icon: 'none' });
+    }
+
+    wx.showLoading({ title: '提交中...' });
+    try {
+      await app.request({
+        url: '/contracts/renew/' + d.contractId,
+        method: 'POST',
+        data: {
+          monthly_rent: parseFloat(d.monthly_rent),
+          payment_method: d.payment_method,
+          deposit: parseFloat(d.deposit),
+          start_date: d.start_date,
+          end_date: d.end_date,
+          remark: d.remark
+        }
+      });
+      wx.showToast({ title: '续签成功' });
+      setTimeout(() => wx.navigateBack(), 1500);
+    } catch (err) {
+      wx.showToast({ title: '续签失败', icon: 'none' });
+    } finally {
+      wx.hideLoading();
+    }
+  }
+});

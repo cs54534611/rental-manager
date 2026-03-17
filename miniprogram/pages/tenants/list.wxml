@@ -1,0 +1,28 @@
+<!-- miniprogram/pages/tenants/list.wxml -->
+<view class="container">
+  <!-- 搜索 -->
+  <view class="search-bar">
+    <input placeholder="搜索姓名/手机号" bindinput="onSearch" />
+    <view class="search-btn">搜索</view>
+  </view>
+
+  <!-- 列表 -->
+  <scroll-view scroll-y class="list">
+    <view class="item" wx:for="{{tenants}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+      <view class="avatar">{{item.name[0]}}</view>
+      <view class="info">
+        <view class="name-row">
+          <text class="name">{{item.name}}</text>
+          <text class="gender">{{item.gender===1?'男':'女'}}</text>
+        </view>
+        <view class="phone">{{item.phone}}</view>
+        <view class="id-card" wx:if="{{item.id_card}}">身份证: {{item.id_card}}</view>
+      </view>
+      <view class="status {{item.status}}">{{item.status===1?'正常':'拉黑'}}</view>
+    </view>
+
+    <view wx:if="{{tenants.length===0}}" class="empty">暂无租客</view>
+  </scroll-view>
+
+  <view class="add-btn" bindtap="goToAdd">➕ 添加租客</view>
+</view>

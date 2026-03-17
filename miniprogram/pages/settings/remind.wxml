@@ -1,0 +1,30 @@
+<!-- miniprogram/pages/settings/remind.wxml -->
+<view class="container">
+  <view class="menu-list">
+    <view class="menu-item">
+      <text>租金到期提醒</text>
+      <switch checked="{{remindRentDays > 0}}" bindchange="onToggleRemind" />
+    </view>
+    <view class="menu-item" wx:if="{{remindRentDays > 0}}">
+      <text>提前天数</text>
+      <picker mode="selector" range="{{[1,3,5,7]}}" bindchange="onDaysChange">
+        <view class="picker">{{remindRentDays}} 天</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="menu-list">
+    <view class="menu-item">
+      <text>合同到期提醒</text>
+      <switch checked="{{remindContractDays > 0}}" bindchange="onToggleContract" />
+    </view>
+    <view class="menu-item" wx:if="{{remindContractDays > 0}}">
+      <text>提前天数</text>
+      <picker mode="selector" range="{{[7,14,30]}}" bindchange="onContractDaysChange">
+        <view class="picker">{{remindContractDays}} 天</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="submit-btn" bindtap="onSave">保存设置</view>
+</view>

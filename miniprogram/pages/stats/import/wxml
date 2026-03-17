@@ -1,0 +1,45 @@
+<!-- miniprogram/pages/stats/import.wxml -->
+<view class="container">
+  <view class="section">
+    <view class="section-title">批量导入</view>
+    <view class="import-types">
+      <view class="import-item" bindtap="downloadTemplate" data-type="houses">
+        <text class="icon">🏠</text>
+        <text class="name">房源模板</text>
+      </view>
+      <view class="import-item" bindtap="downloadTemplate" data-type="tenants">
+        <text class="icon">👤</text>
+        <text class="name">租客模板</text>
+      </view>
+      <view class="import-item" bindtap="downloadTemplate" data-type="contracts">
+        <text class="icon">📄</text>
+        <text class="name">合同模板</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">导入数据</view>
+    <view class="upload-area" bindtap="chooseFile">
+      <text class="icon">📁</text>
+      <text class="text">点击选择CSV文件</text>
+    </view>
+  </view>
+
+  <view class="section" wx:if="{{previewData.length > 0}}">
+    <view class="section-title">预览数据 ({{previewData.length}}条)</view>
+    <scroll-view scroll-x class="table">
+      <view class="table-header">
+        <text wx:for="{{previewHeaders}}" wx:key="*this">{{item}}</text>
+      </view>
+      <view class="table-row" wx:for="{{previewData}}" wx:key="*this">
+        <text wx:for="{{item}}" wx:key="*this">{{item}}</text>
+      </view>
+    </scroll-view>
+    
+    <view class="btn-group">
+      <view class="btn cancel" bindtap="clearPreview">取消</view>
+      <view class="btn confirm" bindtap="confirmImport">确认导入</view>
+    </view>
+  </view>
+</view>

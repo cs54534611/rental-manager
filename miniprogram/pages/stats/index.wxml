@@ -1,0 +1,107 @@
+<!-- miniprogram/pages/stats/index.wxml -->
+<view class="container">
+  <!-- 概览卡片 -->
+  <view class="overview-card">
+    <view class="overview-item">
+      <text class="value">{{overview.houses.total}}</text>
+      <text class="label">房源总数</text>
+    </view>
+    <view class="overview-item">
+      <text class="value primary">{{overview.houses.rented}}</text>
+      <text class="label">在租</text>
+    </view>
+    <view class="overview-item">
+      <text class="value warning">{{overview.houses.vacant}}</text>
+      <text class="label">空置</text>
+    </view>
+    <view class="overview-item">
+      <text class="value success">{{overview.houses.occupancyRate}}%</text>
+      <text class="label">入住率</text>
+    </view>
+  </view>
+
+  <!-- 本月收入 -->
+  <view class="section">
+    <view class="section-title">📈 本月收入</view>
+    <view class="income-chart">
+      <view class="income-bar">
+        <view class="bar-label">应收</view>
+        <view class="bar-value">
+          <view class="bar" style="width: 100%; background: #e0e0e0;">
+            <text>¥{{overview.income.receivable}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="income-bar">
+        <view class="bar-label">实收</view>
+        <view class="bar-value">
+          <view class="bar primary" style="width: {{overview.income.receivable > 0 ? (overview.income.actual / overview.income.receivable * 100) : 0}}%;">
+            <text>¥{{overview.income.actual}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 房源分布 -->
+  <view class="section">
+    <view class="section-title">🏠 房源状态分布</view>
+    <view class="distribution">
+      <view class="dist-item" wx:for="{{distribution}}" wx:key="name">
+        <view class="dist-color" style="background: {{colors[index]}}"></view>
+        <text class="dist-name">{{item.name}}</text>
+        <text class="dist-value">{{item.value}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 维修统计 -->
+  <view class="section">
+    <view class="section-title">🔧 维修统计</view>
+    <view class="repair-stats">
+      <view class="repair-item">
+        <text class="value">{{repairStats.total}}</text>
+        <text class="label">报修总数</text>
+      </view>
+      <view class="repair-item">
+        <text class="value success">{{repairStats.completed}}</text>
+        <text class="label">已完成</text>
+      </view>
+      <view class="repair-item">
+        <text class="value">¥{{repairStats.avgCost || 0}}</text>
+        <text class="label">平均费用</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 数据导出 -->
+  <view class="section">
+    <view class="section-title">📥 数据导出</view>
+    <view class="export-grid">
+      <view class="export-item" bindtap="onExport" data-type="houses">
+        <text class="export-icon">🏠</text>
+        <text class="export-name">房源列表</text>
+      </view>
+      <view class="export-item" bindtap="onExport" data-type="tenants">
+        <text class="export-icon">👤</text>
+        <text class="export-name">租客列表</text>
+      </view>
+      <view class="export-item" bindtap="onExport" data-type="contracts">
+        <text class="export-icon">📄</text>
+        <text class="export-name">合同列表</text>
+      </view>
+      <view class="export-item" bindtap="onExport" data-type="rentals">
+        <text class="export-icon">💰</text>
+        <text class="export-name">租金列表</text>
+      </view>
+      <view class="export-item" bindtap="onExport" data-type="repairs">
+        <text class="export-icon">🔧</text>
+        <text class="export-name">报修列表</text>
+      </view>
+      <view class="export-item primary" bindtap="goToImport">
+        <text class="export-icon">📥</text>
+        <text class="export-name">批量导入</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,14 @@
+<!-- miniprogram/pages/settings/owner.wxml -->
+<view class="container">
+  <view class="form">
+    <view class="form-item">
+      <text class="label">姓名</text>
+      <input class="input" placeholder="请输入姓名" model:value="{{name}}" />
+    </view>
+    <view class="form-item">
+      <text class="label">电话</text>
+      <input class="input" type="number" placeholder="请输入电话" model:value="{{phone}}" />
+    </view>
+    <view class="submit-btn" bindtap="onSave">保存</view>
+  </view>
+</view>

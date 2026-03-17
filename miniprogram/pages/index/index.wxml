@@ -1,0 +1,113 @@
+<!-- miniprogram/pages/index/index.wxml -->
+<view class="container">
+  <!-- 头部 -->
+  <view class="header">
+    <view class="header-title">租房管理系统</view>
+    <view class="header-subtitle">{{overview.income.actual > 0 ? '本月收入 ' + overview.income.actual + ' 元' : '欢迎使用'}}</view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+
+  <view wx:else>
+    <!-- 经营概览 -->
+    <view class="section">
+      <view class="section-title">📊 经营概览</view>
+      <view class="stats-grid">
+        <view class="stat-card">
+          <view class="stat-value">{{overview.houses.total}}</view>
+          <view class="stat-label">房源总数</view>
+        </view>
+        <view class="stat-card">
+          <view class="stat-value primary">{{overview.houses.rented}}</view>
+          <view class="stat-label">在租</view>
+        </view>
+        <view class="stat-card">
+          <view class="stat-value warning">{{overview.houses.vacant}}</view>
+          <view class="stat-label">空置</view>
+        </view>
+        <view class="stat-card">
+          <view class="stat-value success">{{overview.houses.occupancyRate}}%</view>
+          <view class="stat-label">入住率</view>
+        </view>
+      </view>
+      
+      <!-- 收入卡片 -->
+      <view class="income-card">
+        <view class="income-item">
+          <text class="income-label">本月应收</text>
+          <text class="income-value">¥{{overview.income.receivable || 0}}</text>
+        </view>
+        <view class="income-item">
+          <text class="income-label">本月实收</text>
+          <text class="income-value primary">¥{{overview.income.actual || 0}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 待办提醒 -->
+    <view class="section">
+      <view class="section-title">🔔 待办提醒</view>
+      <view class="todo-list">
+        <view class="todo-item" bindtap="goToContracts">
+          <text class="todo-label">合同到期 (30天内)</text>
+          <text class="todo-badge" wx:if="{{overview.todos.expiringContracts > 0}}">{{overview.todos.expiringContracts}}</text>
+        </view>
+        <view class="todo-item" bindtap="goToRentals">
+          <text class="todo-label">待收租金</text>
+          <text class="todo-badge warning" wx:if="{{overview.todos.pendingRentals > 0}}">¥{{overview.todos.pendingAmount}}</text>
+        </view>
+        <view class="todo-item" bindtap="goToRepairs">
+          <text class="todo-label">待处理报修</text>
+          <text class="todo-badge" wx:if="{{overview.todos.pendingRepairs > 0}}">{{overview.todos.pendingRepairs}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷功能 -->
+    <view class="section">
+      <view class="section-title">⚡ 快捷功能</view>
+      <view class="quick-grid">
+        <view class="quick-item" bindtap="goToAddHouse">
+          <view class="quick-icon">➕</view>
+          <text>添加房源</text>
+        </view>
+        <view class="quick-item" bindtap="goToAddContract">
+          <view class="quick-icon">📝</view>
+          <text>新建合同</text>
+        </view>
+        <view class="quick-item" bindtap="goToAddRental">
+          <view class="quick-icon">💰</view>
+          <text>记收租金</text>
+        </view>
+        <view class="quick-item" bindtap="goToRepairs">
+          <view class="quick-icon">🔧</view>
+          <text>报修管理</text>
+        </view>
+        <view class="quick-item" bindtap="goToStats">
+          <view class="quick-icon">📈</view>
+          <text>数据统计</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 近期到期合同 -->
+    <view class="section" wx:if="{{expiringContracts.length > 0}}">
+      <view class="section-title">📅 近期到期</view>
+      <view class="contract-list">
+        <view class="contract-item" wx:for="{{expiringContracts}}" wx:key="id">
+          <view class="contract-info">
+            <text class="contract-address">{{item.address}}</text>
+            <text class="contract-tenant">{{item.tenant_name}}</text>
+          </view>
+          <view class="contract-date">
+            <text class="date">{{item.end_date}}</text>
+            <text class="days">剩{{item.days_left}}天</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

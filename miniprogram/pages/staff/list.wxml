@@ -1,0 +1,29 @@
+<!-- miniprogram/pages/staff/list.wxml -->
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <input class="search-input" placeholder="搜索维修人员" model:value="{{keyword}}" bindinput="onSearch" />
+  </view>
+
+  <!-- 列表 -->
+  <view class="list">
+    <view class="item" wx:for="{{list}}" wx:key="id">
+      <view class="item-content" bindtap="onDetail" data-id="{{item.id}}">
+        <view class="avatar">{{item.name[0]}}</view>
+        <view class="info">
+          <view class="name">{{item.name}}</view>
+          <view class="desc">{{item.phone}} · {{item.specialty}}</view>
+        </view>
+        <view class="status {{item.status === 1 ? 'active' : ''}}">{{item.status === 1 ? '在职' : '离职'}}</view>
+      </view>
+      <view class="delete-btn" bindtap="onDelete" data-id="{{item.id}}">删除</view>
+    </view>
+    
+    <view wx:if="{{list.length === 0}}" class="empty">
+      <text>暂无维修人员</text>
+    </view>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="add-btn" bindtap="onAdd">+</view>
+</view>

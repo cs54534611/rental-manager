@@ -1,0 +1,68 @@
+<!-- miniprogram/pages/repairs/detail.wxml -->
+<view class="container">
+  <view class="card">
+    <view class="header">
+      <text class="no">{{repair.repair_no}}</text>
+      <text class="urgency {{repair.urgency}}">{{urgencyMap[repair.urgency]}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">报修信息</view>
+    <view class="info-row">
+      <text class="label">房源</text>
+      <text class="value">{{repair.community}} - {{repair.address}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">类型</text>
+      <text class="value">{{typeMap[repair.type]}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">状态</text>
+      <text class="status-tag {{repair.status}}">{{statusMap[repair.status]}}</text>
+    </view>
+    <view class="info-row">
+      <text class="label">提交时间</text>
+      <text class="value">{{repair.created_at}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">问题描述</view>
+    <text class="description">{{repair.description}}</text>
+  </view>
+
+  <!-- 现场照片 -->
+  <view class="card" wx:if="{{repair.photos && repair.photos.length > 0}}">
+    <view class="card-title">现场照片</view>
+    <view class="photo-grid">
+      <image wx:for="{{repair.photos}}" wx:key="*this" src="{{item}}" mode="aspectFill" bindtap="previewPhoto" data-url="{{item}}" />
+    </view>
+  </view>
+
+  <view class="card" wx:if="{{repair.status >= 1 && repair.status < 5 && staffList.length > 0}}">
+    <view class="card-title">分配维修人员</view>
+    <picker mode="selector" range="{{staffList}}" range-key="name" bindchange="onAssignStaff">
+      <view class="picker-btn">{{repair.handler || '点击分配维修人员'}}</view>
+    </picker>
+  </view>
+
+  <view class="card" wx:if="{{repair.handler}}">
+    <view class="card-title">处理信息</view>
+    <view class="info-row">
+      <text class="label">处理人</text>
+      <text class="value">{{repair.handler}}</text>
+    </view>
+    <view class="info-row" wx:if="{{repair.cost}}">
+      <text class="label">维修费用</text>
+      <text class="value primary">¥{{repair.cost}}</text>
+    </view>
+  </view>
+
+  <!-- 状态操作按钮 -->
+  <view class="action-bar" wx:if="{{repair.status < 5}}">
+    <view class="btn primary" bindtap="onUpdateStatus" data-status="{{repair.status + 1}}">
+      {{actionMap[repair.status]}}
+    </view>
+  </view>
+</view>

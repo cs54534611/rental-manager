@@ -1,0 +1,62 @@
+<!-- miniprogram/pages/repairs/add.wxml -->
+<view class="container">
+  <view class="form">
+    <view class="form-section">
+      <view class="form-title">报修信息</view>
+      
+      <view class="form-item">
+        <text class="label">房源 *</text>
+        <picker mode="selector" range="{{houses}}" range-key="label" bindchange="onHouseChange">
+          <view class="picker">{{selectedHouse ? selectedHouse.label : '请选择房源'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">报修类型 *</text>
+        <picker mode="selector" range="{{types}}" bindchange="onTypeChange">
+          <view class="picker">{{types[type] || '请选择'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">紧急程度 *</text>
+        <picker mode="selector" range="{{urgencies}}" bindchange="onUrgencyChange">
+          <view class="picker">{{urgencies[urgency] || '请选择'}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="form-section">
+      <view class="form-title">问题描述 *</view>
+      <textarea class="textarea" placeholder="请详细描述故障情况" model:value="{{description}}" />
+    </view>
+
+    <!-- 报修照片 -->
+    <view class="form-section">
+      <view class="form-title">现场照片</view>
+      <view class="photo-grid">
+        <view class="photo-item" wx:for="{{photos}}" wx:key="*this">
+          <image src="{{item}}" mode="aspectFill" />
+          <view class="photo-delete" bindtap="deletePhoto" data-index="{{index}}">×</view>
+        </view>
+        <view class="photo-add" bindtap="addPhoto" wx:if="{{photos.length < 9}}">
+          <text>+</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-section">
+      <view class="form-title">期望处理时间</view>
+      <picker mode="date" value="{{expected_time}}" bindchange="onExpectedTimeChange">
+        <view class="picker">{{expected_time || '请选择期望时间'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-section">
+      <view class="form-title">备注</view>
+      <textarea class="textarea" placeholder="请输入备注" model:value="{{remark}}" />
+    </view>
+
+    <view class="submit-btn" bindtap="onSubmit">提交报修</view>
+  </view>
+</view>

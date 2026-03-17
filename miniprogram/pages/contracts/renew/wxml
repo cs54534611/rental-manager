@@ -1,0 +1,70 @@
+<!-- miniprogram/pages/contracts/renew.wxml -->
+<view class="container">
+  <view class="form">
+    <!-- 原合同信息 -->
+    <view class="form-section" wx:if="{{contract}}">
+      <view class="form-title">原合同信息</view>
+      <view class="info-card">
+        <view class="info-row">
+          <text class="label">房源</text>
+          <text class="value">{{contract.community}} - {{contract.address}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">租客</text>
+          <text class="value">{{contract.tenant_name}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">原租金</text>
+          <text class="value primary">¥{{contract.monthly_rent}}/月</text>
+        </view>
+        <view class="info-row">
+          <text class="label">原合同期</text>
+          <text class="value">{{contract.start_date}} ~ {{contract.end_date}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 续签信息 -->
+    <view class="form-section">
+      <view class="form-title">续签信息</view>
+      
+      <view class="form-item">
+        <text class="label">新租金(元) *</text>
+        <input class="input" type="digit" placeholder="请输入月租金" model:value="{{monthly_rent}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">付款方式 *</text>
+        <picker mode="selector" range="{{paymentMethods}}" bindchange="onPaymentChange">
+          <view class="picker">{{paymentMethods[payment_method] || '请选择付款方式'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">押金(元) *</text>
+        <input class="input" type="digit" placeholder="请输入押金" model:value="{{deposit}}" />
+      </view>
+      
+      <view class="form-item">
+        <text class="label">开始日期 *</text>
+        <picker mode="date" value="{{start_date}}" bindchange="onStartDateChange">
+          <view class="picker">{{start_date || '请选择开始日期'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">结束日期 *</text>
+        <picker mode="date" value="{{end_date}}" bindchange="onEndDateChange">
+          <view class="picker">{{end_date || '请选择结束日期'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="label">备注</text>
+        <textarea class="textarea" placeholder="请输入备注" model:value="{{remark}}" />
+      </view>
+    </view>
+
+    <view class="submit-btn" bindtap="onSubmit">确认续签</view>
+  </view>
+</view>

@@ -1,0 +1,63 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/houses/list",
+    "pages/houses/detail",
+    "pages/houses/add",
+    "pages/tenants/list",
+    "pages/tenants/detail",
+    "pages/tenants/add",
+    "pages/contracts/list",
+    "pages/contracts/detail",
+    "pages/contracts/add",
+    "pages/contracts/renew",
+    "pages/rentals/list",
+    "pages/rentals/add",
+    "pages/repairs/list",
+    "pages/repairs/detail",
+    "pages/repairs/add",
+    "pages/stats/index",
+    "pages/stats/import",
+    "pages/staff/list",
+    "pages/staff/add",
+    "pages/settings/index",
+    "pages/settings/owner",
+    "pages/settings/remind"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#667eea",
+    "navigationBarTitleText": "租房管理",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#667eea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/houses/list",
+        "text": "房源"
+      },
+      {
+        "pagePath": "pages/contracts/list",
+        "text": "合同"
+      },
+      {
+        "pagePath": "pages/rentals/list",
+        "text": "租金"
+      },
+      {
+        "pagePath": "pages/settings/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
