@@ -2,6 +2,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const housesRouter = require('./routes/houses');
 const tenantsRouter = require('./routes/tenants');
@@ -13,6 +14,7 @@ const settingsRouter = require('./routes/settings');
 const staffRouter = require('./routes/staff');
 const backupRouter = require('./routes/backup');
 const notifyRouter = require('./routes/notify');
+const uploadRouter = require('./routes/upload');
 const { scheduleBackup } = require('./backup');
 
 const app = express();
@@ -22,6 +24,9 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// 静态文件服务（上传的图片）
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // 路由
 app.use('/api/houses', housesRouter);
@@ -34,6 +39,7 @@ app.use('/api/settings', settingsRouter);
 app.use('/api/staff', staffRouter);
 app.use('/api/backup', backupRouter);
 app.use('/api/notify', notifyRouter);
+app.use('/api/upload', uploadRouter);
 
 // 启用自动备份（每天凌晨2点，保留7天）
 scheduleBackup({ cron: '0 2 * * *', keepCount: 7 });
