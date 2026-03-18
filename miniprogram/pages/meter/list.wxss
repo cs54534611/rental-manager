@@ -1,0 +1,149 @@
+/* miniprogram/pages/meter/list.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+.filter {
+  display: flex;
+  background: #fff;
+  padding: 20rpx;
+  gap: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.picker {
+  flex: 1;
+  padding: 16rpx 24rpx;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  color: #333;
+  text-align: center;
+}
+
+.arrow {
+  margin-left: 10rpx;
+  color: #999;
+  font-size: 20rpx;
+}
+
+.meter-list {
+  padding: 20rpx;
+}
+
+.meter-item {
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.meter-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20rpx;
+  background: #f9f9f9;
+  border-bottom: 1rpx solid #eee;
+}
+
+.address {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.period {
+  font-size: 26rpx;
+  color: #667eea;
+}
+
+.meter-body {
+  padding: 20rpx;
+}
+
+.meter-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx dashed #eee;
+}
+
+.meter-row:last-of-type {
+  border-bottom: none;
+}
+
+.meter-row .label {
+  width: 100rpx;
+  font-size: 26rpx;
+  color: #999;
+}
+
+.meter-row .value {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.meter-row .usage {
+  font-size: 24rpx;
+  color: #999;
+  margin-right: 20rpx;
+}
+
+.meter-row .fee {
+  font-size: 28rpx;
+  color: #f44336;
+  font-weight: bold;
+}
+
+.meter-total {
+  text-align: right;
+  padding: 20rpx 0 0;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  border-top: 1rpx solid #eee;
+  margin-top: 10rpx;
+}
+
+.meter-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.recorded_by {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.empty {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.add-btn {
+  position: fixed;
+  right: 40rpx;
+  bottom: 40rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.4);
+}
+
+.add-btn text {
+  font-size: 60rpx;
+  color: #fff;
+  font-weight: bold;
+}

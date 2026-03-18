@@ -127,7 +127,7 @@ async function upload(fileBuffer, filename, folder = 'misc') {
 /**
  * 获取存储配置
  */
-function getStorageConfig(provider) {
+async function getStorageConfig(provider) {
   const db = require('./db');
   try {
     const [rows] = await db.query('SELECT * FROM storage_config WHERE provider = ? AND enabled = 1', [provider]);

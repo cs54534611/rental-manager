@@ -16,6 +16,11 @@ const backupRouter = require('./routes/backup');
 const notifyRouter = require('./routes/notify');
 const uploadRouter = require('./routes/upload');
 const authRouter = require('./routes/auth');
+const transactionsRouter = require('./routes/transactions');
+const contractTemplateRouter = require('./routes/contractTemplate');
+const meterRouter = require('./routes/meter');
+const checkoutRouter = require('./routes/checkout');
+const paymentsRouter = require('./routes/payments');
 const { scheduleBackup } = require('./backup');
 
 const app = express();
@@ -42,6 +47,11 @@ app.use('/api/backup', backupRouter);
 app.use('/api/notify', notifyRouter);
 app.use('/api/upload', uploadRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/transactions', transactionsRouter);
+app.use('/api/contract-templates', contractTemplateRouter);
+app.use('/api/meter', meterRouter);
+app.use('/api/checkout', checkoutRouter);
+app.use('/api/payments', paymentsRouter);
 
 // 启用自动备份（每天凌晨2点，保留7天）
 scheduleBackup({ cron: '0 2 * * *', keepCount: 7 });

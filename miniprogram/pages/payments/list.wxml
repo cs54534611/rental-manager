@@ -1,0 +1,58 @@
+<!--miniprogram/pages/payments/list.wxml-->
+<view class="container">
+  <!-- 筛选 -->
+  <view class="filter">
+    <picker mode="selector" range="{{statusList}}" range-key="name" bindchange="onStatusChange" value="{{statusIndex}}">
+      <view class="picker">
+        {{statusText}}
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 支付记录列表 -->
+  <view class="payment-list">
+    <view class="payment-item" wx:for="{{list}}" wx:key="id">
+      <view class="payment-header">
+        <text class="payment-no">{{item.payment_no}}</text>
+        <text class="payment-status {{item.status}}">{{item.status === 'success' ? '已支付' : item.status === 'pending' ? '待支付' : item.status === 'failed' ? '失败' : '已退款'}}</text>
+      </view>
+      <view class="payment-body">
+        <view class="info-row">
+          <text class="label">房源：</text>
+          <text class="value">{{item.address || '-'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">租客：</text>
+          <text class="value">{{item.tenant_name || '-'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">租金期间：</text>
+          <text class="value">{{item.period || '-'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">支付方式：</text>
+          <text class="value">{{item.channel === 'wechat' ? '微信支付' : item.channel === 'alipay' ? '支付宝' : '银行转账'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">支付时间：</text>
+          <text class="value">{{item.pay_time || '-'}}</text>
+        </view>
+      </view>
+      <view class="payment-footer">
+        <text class="amount">¥{{item.amount}}</text>
+        <button class="btn-refund" wx:if="{{item.status === 'success'}}" size="mini" bindtap="handleRefund" data-id="{{item.id}}">退款</button>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{list.length === 0}}">
+      <text>暂无支付记录</text>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{list.length > 0}}">
+      <text>{{hasMore ? '加载中...' : '没有更多了'}}</text>
+    </view>
+  </view>
+</view>

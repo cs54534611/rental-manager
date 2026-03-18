@@ -1,0 +1,58 @@
+<!--miniprogram/pages/meter/list.wxml-->
+<view class="container">
+  <!-- 筛选 -->
+  <view class="filter">
+    <picker mode="selector" range="{{houses}}" range-key="address" bindchange="onHouseChange" value="{{houseIndex}}">
+      <view class="picker">
+        {{houseText}}
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+    <picker mode="date" fields="month" bindchange="onMonthChange">
+      <view class="picker">
+        {{selectedMonth || '选择月份'}}
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 列表 -->
+  <view class="meter-list">
+    <view class="meter-item" wx:for="{{list}}" wx:key="id">
+      <view class="meter-header">
+        <text class="address">{{item.address}}</text>
+        <text class="period">{{item.period}}</text>
+      </view>
+      <view class="meter-body">
+        <view class="meter-row">
+          <text class="label">水表</text>
+          <text class="value">{{item.water_current}}吨</text>
+          <text class="usage">用量: {{item.water_usage}}吨</text>
+          <text class="fee">¥{{item.water_fee}}</text>
+        </view>
+        <view class="meter-row">
+          <text class="label">电表</text>
+          <text class="value">{{item.electric_current}}度</text>
+          <text class="usage">用量: {{item.electric_usage}}度</text>
+          <text class="fee">¥{{item.electric_fee}}</text>
+        </view>
+        <view class="meter-total">
+          <text>合计: ¥{{item.total_fee}}</text>
+        </view>
+      </view>
+      <view class="meter-footer">
+        <text class="recorded_by">录入人: {{item.recorded_by || '-'}}</text>
+        <button size="mini" bindtap="handleEdit" data-id="{{item.id}}">编辑</button>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{list.length === 0}}">
+      <text>No records</text>
+    </view>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="add-btn" bindtap="goToAdd">
+    <text>+</text>
+  </view>
+</view>

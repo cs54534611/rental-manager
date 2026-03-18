@@ -4,17 +4,20 @@
 
 ## 📱 功能模块
 
-| 模块 | 功能 |
-|------|------|
-| 房源管理 | 列表、详情、添加/编辑、照片上传、配套设施 |
-| 租客管理 | 列表、详情、添加/编辑 |
-| 合同管理 | 列表、详情、添加、续签 |
-| 租金管理 | 列表、添加、逾期提醒 |
-| 报修管理 | 列表、详情、添加、照片上传、分配维修人员 |
-| 维修人员 | 列表、添加/编辑、删除 |
-| 数据统计 | 概览、导出CSV、批量导入 |
-| 数据备份 | 手动/自动备份、还原 |
-| 系统设置 | 房东信息、租金提醒 |
+| 模块 | 功能 | 入口 |
+|------|------|------|
+| 房源管理 | 列表、详情、添加/编辑、照片上传、配套设施 | 首页 → 房源管理 |
+| 租客管理 | 列表、详情、添加/编辑 | 首页 → 租客管理 |
+| 合同管理 | 列表、详情、添加、续签、合同模板 | 首页 → 合同管理 |
+| 租金管理 | 列表、添加、逾期提醒、**在线支付** | 首页 → 租金管理 |
+| 报修管理 | 列表、详情、添加、照片上传、分配维修人员 | 首页 → 报修管理 |
+| 维修人员 | 列表、添加/编辑、删除 | 首页 → 维修人员 |
+| 数据统计 | 概览、导出CSV、批量导入 | 首页 → 数据统计 |
+| 数据备份 | 手动/自动备份、还原 | 首页 → 数据备份 |
+| 系统设置 | 房东信息、租金提醒 | 首页 → 系统设置 |
+| **财务管理** | 收入统计、支付记录、**收款** | 首页 → 财务 |
+| **抄表记录** | 水电表录入、费用计算 | 首页 → 抄表 |
+| **退房检查** | 退房申请、物品检查、押金结算 | 首页 → 退房 |
 
 ## 🛠️ 技术栈
 
@@ -30,7 +33,21 @@ git clone https://github.com/cs54534611/rental-manager.git
 cd rental-manager
 ```
 
-### 2. 启动后端
+### 2. 初始化数据库
+```bash
+# 执行 database 目录下的所有 SQL 文件
+mysql -u root -p < database/init.sql
+mysql -u root -p < database/notify.sql
+mysql -u root -p < database/storage.sql
+mysql -u root -p < database/admin.sql
+mysql -u root -p < database/contract_template.sql
+mysql -u root -p < database/meter.sql
+mysql -u root -p < database/checkout.sql
+mysql -u root -p < database/transactions.sql
+mysql -u root -p < database/payments.sql
+```
+
+### 3. 启动后端
 ```bash
 cd server
 npm install
@@ -38,7 +55,7 @@ npm start
 ```
 服务运行在 http://localhost:3000
 
-### 3. 配置小程序
+### 4. 配置小程序
 1. 用**微信开发者工具**打开 `miniprogram/` 目录
 2. 修改 `app.js` 中的 `baseUrl` 为你的服务器地址
 3. 配置 AppID（可在微信公众平台申请测试号）
@@ -49,14 +66,18 @@ npm start
 rental-manager/
 ├── miniprogram/          # 微信小程序前端
 │   └── pages/
-│       ├── index/        # 首页
+│       ├── index/        # 首页（功能入口）
 │       ├── houses/      # 房源管理
 │       ├── tenants/      # 租客管理
 │       ├── contracts/    # 合同管理
 │       ├── rentals/      # 租金管理
+│       ├── payments/     # 支付/收款
 │       ├── repairs/      # 报修管理
 │       ├── staff/        # 维修人员
 │       ├── stats/        # 数据统计
+│       ├── finance/      # 财务管理
+│       ├── meter/        # 抄表记录
+│       ├── checkout/     # 退房检查
 │       ├── backup/       # 数据备份
 │       └── settings/     # 系统设置
 ├── server/               # Node.js 后端
@@ -69,6 +90,7 @@ rental-manager/
 
 ## 📦 API 接口
 
+### 核心接口
 | 路由 | 方法 | 说明 |
 |------|------|------|
 | `/api/houses` | GET/POST | 房源列表/添加 |
@@ -84,16 +106,75 @@ rental-manager/
 | `/api/stats/import/:type` | POST | 批量导入 |
 | `/api/backup` | GET/POST | 备份列表/手动备份 |
 
-## 🔄 待完善功能
+### 扩展接口
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/payments/channels` | GET | 获取支付渠道 |
+| `/api/payments/create` | POST | 创建支付订单 |
+| `/api/payments/list` | GET | 支付记录列表 |
+| `/api/payments/stats` | GET | 支付统计 |
+| `/api/payments/notify` | POST | 支付回调 |
+| `/api/payments/refund` | POST | 退款 |
+| `/api/transactions` | GET/POST | 收支记录 |
+| `/api/meter` | GET/POST | 抄表记录 |
+| `/api/meter/calculate` | POST | 计算费用 |
+| `/api/checkout` | GET/POST | 退房检查 |
+| `/api/notify/templates` | GET | 通知模板 |
+| `/api/notify/send` | POST | 发送通知 |
+| `/api/contract-templates` | GET/POST | 合同模板 |
+| `/api/storage/config` | GET/PUT | 存储配置 |
 
-- [x] 微信通知推送
-- [x] 云存储（照片/附件）
-- [ ] 多管理员权限
-- [ ] 收款功能对接
-- [ ] 财务报表
-- [ ] 合同模板生成
-- [ ] 抄表记录
-- [ ] 退房检查
+### 管理接口
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/auth/login` | POST | 管理员登录 |
+| `/api/auth/logout` | POST | 登出 |
+| `/api/auth/current` | GET | 当前用户 |
+
+## 🔄 已实现功能详情
+
+### 1. 微信通知推送 ✅
+- 租金到期提醒
+- 合同到期提醒
+- 报修状态通知
+- 可配置通知模板
+
+### 2. 云存储（OSS/COS）✅
+- 阿里云OSS支持
+- 腾讯云COS支持
+- 本地存储（默认）
+
+### 3. 多管理员权限 ✅
+- 角色：super/admin/finance/repair
+- 细粒度权限控制
+
+### 4. 收款功能 ✅
+- 微信支付
+- 支付宝
+- 支付记录查询
+- 退款功能
+- 收入统计
+
+### 5. 财务报表 ✅
+- 收支记录
+- 收入统计
+- 支付方式分析
+- 趋势图表
+
+### 6. 合同模板 ✅
+- 自定义合同模板
+- 变量替换
+- 一键生成
+
+### 7. 抄表记录 ✅
+- 水表记录
+- 电表记录
+- 自动计算费用
+
+### 8. 退房检查 ✅
+- 退房申请
+- 物品检查清单
+- 押金结算
 
 ## 📄 License
 

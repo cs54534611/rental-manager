@@ -1,0 +1,61 @@
+<!--miniprogram/pages/meter/add.wxml-->
+<view class="container">
+  <form bindsubmit="handleSubmit">
+    <view class="form-group">
+      <text class="label">房源</text>
+      <picker mode="selector" range="{{houses}}" range-key="address" bindchange="onHouseChange" value="{{houseIndex}}">
+        <view class="picker {{!selectedHouseId ? 'placeholder' : ''}}">
+          {{houseText || '请选择房源'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <text class="label">月份</text>
+      <picker mode="date" fields="month" value="{{period}}" bindchange="onPeriodChange">
+        <view class="picker {{!period ? 'placeholder' : ''}}">
+          {{period || '请选择月份'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-section">
+      <view class="section-title">水表</view>
+      <view class="form-group">
+        <text class="label">上次读数</text>
+        <input class="input" type="digit" value="{{water_last}}" bindinput="onWaterLastChange" placeholder="吨"/>
+      </view>
+      <view class="form-group">
+        <text class="label">当前读数</text>
+        <input class="input" type="digit" value="{{water_current}}" bindinput="onWaterCurrentChange" placeholder="吨"/>
+      </view>
+      <view class="form-group">
+        <text class="label">单价(元/吨)</text>
+        <input class="input" type="digit" value="{{water_rate}}" bindinput="onWaterRateChange"/>
+      </view>
+    </view>
+
+    <view class="form-section">
+      <view class="section-title">电表</view>
+      <view class="form-group">
+        <text class="label">上次读数</text>
+        <input class="input" type="digit" value="{{electric_last}}" bindinput="onElectricLastChange" placeholder="度"/>
+      </view>
+      <view class="form-group">
+        <text class="label">当前读数</text>
+        <input class="input" type="digit" value="{{electric_current}}" bindinput="onElectricCurrentChange" placeholder="度"/>
+      </view>
+      <view class="form-group">
+        <text class="label">单价(元/度)</text>
+        <input class="input" type="digit" value="{{electric_rate}}" bindinput="onElectricRateChange"/>
+      </view>
+    </view>
+
+    <view class="form-group">
+      <text class="label">备注</text>
+      <input class="input" value="{{remark}}" bindinput="onRemarkChange" placeholder="备注信息"/>
+    </view>
+
+    <button class="submit-btn" form-type="submit">保存</button>
+  </form>
+</view>

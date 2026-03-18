@@ -1,0 +1,52 @@
+<!--miniprogram/pages/checkout/list.wxml-->
+<view class="container">
+  <!-- 筛选 -->
+  <view class="filter">
+    <picker mode="selector" range="{{statusList}}" range-key="name" bindchange="onStatusChange" value="{{statusIndex}}">
+      <view class="picker">
+        {{statusText}}
+        <text class="arrow">▼</text>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 列表 -->
+  <view class="checkout-list">
+    <view class="checkout-item" wx:for="{{list}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+      <view class="checkout-header">
+        <text class="contract-no">{{item.contract_no}}</text>
+        <text class="status {{item.status}}">{{statusText[item.status]}}</text>
+      </view>
+      <view class="checkout-body">
+        <view class="info-row">
+          <text class="label">房源：</text>
+          <text class="value">{{item.address || '-'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">租客：</text>
+          <text class="value">{{item.tenant_name || '-'}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">申请时间：</text>
+          <text class="value">{{item.apply_date}}</text>
+        </view>
+        <view class="info-row">
+          <text class="label">应收押金：</text>
+          <text class="value">¥{{item.deposit_expected || 0}}</text>
+        </view>
+      </view>
+      <view class="checkout-footer" wx:if="{{item.status == 2}}">
+        <text class="refund">应退押金: ¥{{item.deposit_refund}}</text>
+      </view>
+    </view>
+
+    <view class="empty" wx:if="{{list.length === 0}}">
+      <text>暂无退房记录</text>
+    </view>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="add-btn" bindtap="goToAdd">
+    <text>+</text>
+  </view>
+</view>
