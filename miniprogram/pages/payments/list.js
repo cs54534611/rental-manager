@@ -23,6 +23,10 @@ Page({
     this.loadList();
   },
 
+  onShow() {
+    this.loadList();
+  },
+
   async loadList() {
     try {
       const res = await app.request({

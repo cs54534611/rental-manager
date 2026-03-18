@@ -90,6 +90,22 @@
           <view class="quick-icon">📈</view>
           <text>数据统计</text>
         </view>
+        <view class="quick-item" bindtap="goToContracts">
+          <view class="quick-icon">📄</view>
+          <text>合同管理</text>
+        </view>
+        <view class="quick-item" bindtap="goToTenants">
+          <view class="quick-icon">👤</view>
+          <text>租客管理</text>
+        </view>
+        <view class="quick-item" bindtap="goToStaff">
+          <view class="quick-icon">🔧</view>
+          <text>维修人员</text>
+        </view>
+        <view class="quick-item" bindtap="goToBackup">
+          <view class="quick-icon">💾</view>
+          <text>数据备份</text>
+        </view>
       </view>
     </view>
 

@@ -56,11 +56,11 @@ Page({
   },
   
   goToRepairs() {
-    wx.navigateTo({ url: '/pages/repairs/list' });
+    wx.navigateTo({ url: '/pages/repairs/list?status=0' });
   },
 
   goToContracts() {
-    wx.navigateTo({ url: '/pages/contracts/list' });
+    wx.navigateTo({ url: '/pages/contracts/list?status=1' });
   },
 
   goToRentals() {
@@ -69,5 +69,17 @@ Page({
   
   goToStats() {
     wx.navigateTo({ url: '/pages/stats/index' });
+  },
+  
+  goToTenants() {
+    wx.navigateTo({ url: '/pages/tenants/list' });
+  },
+  
+  goToStaff() {
+    wx.navigateTo({ url: '/pages/staff/list' });
+  },
+  
+  goToBackup() {
+    wx.navigateTo({ url: '/pages/backup/index' });
   }
 });

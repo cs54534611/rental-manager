@@ -36,7 +36,10 @@
           <text class="receivable">应收: ¥{{item.receivable}}</text>
           <text class="actual" wx:if="{{item.status===1}}">实收: ¥{{item.actual}}</text>
         </view>
-        <view class="action" wx:if="{{item.status===0}}" bindtap="onPay" data-id="{{item.id}}">记收</view>
+        <view class="actions">
+          <view class="edit" wx:if="{{item.status===0}}" bindtap="onPay" data-id="{{item.id}}">记收</view>
+          <view class="delete" bindtap="onDelete" data-id="{{item.id}}">删除</view>
+        </view>
       </view>
     </view>
 

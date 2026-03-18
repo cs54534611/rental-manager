@@ -17,6 +17,7 @@ Page({
 
   onShow() {
     this.loadRentals();
+    this.loadPendingStats();
   },
 
   async loadRentals() {
@@ -39,7 +40,27 @@ Page({
   },
 
   onPay(e) {
-    wx.navigateTo({ url: '/pages/rentals/add?id=' + e.currentTarget.dataset.id });
+    const id = e.currentTarget.dataset.id;
+    wx.navigateTo({ url: '/pages/rentals/pay?id=' + id });
+  },
+
+  onDelete(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要删除该租金记录吗？',
+      success: async (res) => {
+        if (res.confirm) {
+          try {
+            await app.request({ url: '/rentals/' + id, method: 'DELETE' });
+            wx.showToast({ title: '删除成功' });
+            this.loadRentals();
+          } catch (err) {
+            wx.showToast({ title: '删除失败', icon: 'none' });
+          }
+        }
+      }
+    });
   },
 
   goToAdd() {

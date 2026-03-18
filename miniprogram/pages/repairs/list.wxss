@@ -61,11 +61,26 @@ page { background: #f5f7fa; }
   justify-content: space-between;
 }
 .date { font-size: 24rpx; color: #999; }
+.footer-right { display: flex; align-items: center; gap: 16rpx; }
 .status { font-size: 24rpx; padding: 4rpx 12rpx; border-radius: 6rpx; }
 .status[status="0"] { background: #fee2e2; color: #dc2626; }
 .status[status="1"], .status[status="2"], .status[status="3"] { background: #fef3c7; color: #d97706; }
 .status[status="4"] { background: #e0f2fe; color: #0284c7; }
 .status[status="5"], .status[status="6"] { background: #d1fae5; color: #059669; }
+.delete { 
+  font-size: 24rpx; 
+  color: #fff; 
+  background: #ef4444; 
+  padding: 8rpx 20rpx; 
+  border-radius: 8rpx; 
+}
+.edit { 
+  font-size: 24rpx; 
+  color: #fff; 
+  background: #3b82f6; 
+  padding: 8rpx 20rpx; 
+  border-radius: 8rpx; 
+}
 
 .empty { text-align: center; padding: 100rpx; color: #999; }
 

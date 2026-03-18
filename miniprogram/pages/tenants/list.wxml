@@ -18,7 +18,10 @@
         <view class="phone">{{item.phone}}</view>
         <view class="id-card" wx:if="{{item.id_card}}">身份证: {{item.id_card}}</view>
       </view>
-      <view class="status {{item.status}}">{{item.status===1?'正常':'拉黑'}}</view>
+      <view class="right-actions">
+        <view class="status {{item.status}}">{{item.status===1?'正常':'拉黑'}}</view>
+        <view class="delete-btn" catchtap="onDelete" data-id="{{item.id}}">删除</view>
+      </view>
     </view>
 
     <view wx:if="{{tenants.length===0}}" class="empty">暂无租客</view>

@@ -200,4 +200,35 @@ router.get('/reminder/list', async (req, res) => {
   }
 });
 
+// 更新租金记录
+router.put('/:id', async (req, res) => {
+  try {
+    const { receivable, actual, payment_method, paid_date, remark } = req.body;
+    
+    const [existing] = await db.query('SELECT * FROM rentals WHERE id = ?', [req.params.id]);
+    if (existing.length === 0) {
+      return res.status(404).json({ code: 1, message: '记录不存在' });
+    }
+    
+    await db.query(
+      `UPDATE rentals SET receivable = ?, actual = ?, payment_method = ?, paid_date = ?, remark = ?, status = 1 WHERE id = ?`,
+      [receivable, actual, payment_method, paid_date, remark, req.params.id]
+    );
+    
+    res.json({ code: 0, message: '更新成功' });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
+// 删除租金记录
+router.delete('/:id', async (req, res) => {
+  try {
+    await db.query('UPDATE rentals SET is_deleted = 1 WHERE id = ?', [req.params.id]);
+    res.json({ code: 0, message: '删除成功' });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
 module.exports = router;

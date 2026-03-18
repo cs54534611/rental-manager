@@ -43,7 +43,17 @@ router.get('/:id', async (req, res) => {
 // 申请退房
 router.post('/', async (req, res) => {
   try {
-    const { contract_id, deposit_expected } = req.body;
+    const { contract_id, deposit_expected, checkout_date, remark } = req.body;
+    
+    if (!contract_id) {
+      return res.status(400).json({ code: 1, message: '缺少合同ID' });
+    }
+    
+    // 格式化日期
+    let checkDate = null;
+    if (checkout_date) {
+      checkDate = checkout_date.split('T')[0]; // 只取日期部分 YYYY-MM-DD
+    }
     
     // 检查是否有未缴租金
     const [rentals] = await db.query(
@@ -55,9 +65,19 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ code: 1, message: '该合同有未缴租金，请先结清' });
     }
     
+    // 检查是否已有退房申请
+    const [existing] = await db.query(
+      'SELECT id FROM checkouts WHERE contract_id = ? AND status IN (0, 1)',
+      [contract_id]
+    );
+    
+    if (existing.length > 0) {
+      return res.status(400).json({ code: 1, message: '该合同已有退房申请' });
+    }
+    
     const [result] = await db.query(
-      'INSERT INTO checkouts (contract_id, deposit_expected, status) VALUES (?, ?, 0)',
-      [contract_id, deposit_expected || 0]
+      'INSERT INTO checkouts (contract_id, deposit_expected, check_date, remark, status, apply_date) VALUES (?, ?, ?, ?, 0, NOW())',
+      [contract_id, deposit_expected || 0, checkDate, remark || '']
     );
     
     // 更新合同状态
@@ -133,6 +153,23 @@ router.delete('/:id', async (req, res) => {
   try {
     await db.query('DELETE FROM checkouts WHERE id = ?', [req.params.id]);
     res.json({ code: 0, message: '删除成功' });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
+// 更新退房状态（通过/拒绝）
+router.put('/:id', async (req, res) => {
+  try {
+    const { status } = req.body;
+    
+    if (status === undefined) {
+      return res.status(400).json({ code: 1, message: '缺少status参数' });
+    }
+    
+    await db.query('UPDATE checkouts SET status = ? WHERE id = ?', [status, req.params.id]);
+    
+    res.json({ code: 0, message: '更新成功' });
   } catch (err) {
     res.status(500).json({ code: 1, message: err.message });
   }

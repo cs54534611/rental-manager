@@ -2,8 +2,8 @@
 <view class="container">
   <!-- 筛选 -->
   <view class="filter-bar">
-    <view class="filter-item {{status===''?'active':''}}" bindtap="onFilter" data-status="">全部</view>
-    <view class="filter-item {{status===0?'active':''}}" bindtap="onFilter" data-status="0">待受理</view>
+    <view class="filter-item {{status===''||status===undefined?'active':''}}" bindtap="onFilter" data-status="">全部</view>
+    <view class="filter-item {{status==0?'active':''}}" bindtap="onFilter" data-status="0">待受理</view>
     <view class="filter-item {{status>=1&&status<5?'active':''}}" bindtap="onFilter" data-status="1">处理中</view>
     <view class="filter-item {{status>=5?'active':''}}" bindtap="onFilter" data-status="5">已完成</view>
   </view>
@@ -22,7 +22,13 @@
       <view class="item-desc">{{item.description}}</view>
       <view class="item-footer">
         <text class="date">{{item.created_at}}</text>
-        <text class="status {{item.status}}">{{statusMap[item.status]}}</text>
+        <view class="footer-right">
+          <text class="status {{item.status}}">{{statusMap[item.status]}}</text>
+          <view class="footer-right">
+            <text class="edit" bindtap="goToDetail" data-id="{{item.id}}">详情</text>
+            <text class="delete" catchtap="onDelete" data-id="{{item.id}}">删除</text>
+          </view>
+        </view>
       </view>
     </view>
 

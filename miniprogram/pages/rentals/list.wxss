@@ -90,6 +90,22 @@ page { background: #f5f7fa; }
   font-size: 26rpx;
 }
 
+.actions { display: flex; align-items: center; gap: 16rpx; }
+.edit {
+  font-size: 24rpx;
+  color: #fff;
+  background: #3b82f6;
+  padding: 10rpx 24rpx;
+  border-radius: 8rpx;
+}
+.delete {
+  font-size: 24rpx;
+  color: #fff;
+  background: #ef4444;
+  padding: 10rpx 24rpx;
+  border-radius: 8rpx;
+}
+
 .empty {
   text-align: center;
   padding: 100rpx;

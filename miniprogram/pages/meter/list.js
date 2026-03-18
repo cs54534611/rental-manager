@@ -16,6 +16,10 @@ Page({
     this.loadList();
   },
 
+  onShow() {
+    this.loadList();
+  },
+
   async loadHouses() {
     try {
       const res = await app.request({ url: '/houses', method: 'GET' });
@@ -61,6 +65,25 @@ Page({
   handleEdit(e) {
     const id = e.currentTarget.dataset.id;
     wx.navigateTo({ url: `/pages/meter/add?id=${id}` });
+  },
+
+  handleDelete(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要删除该抄表记录吗？',
+      success: async (res) => {
+        if (res.confirm) {
+          try {
+            await app.request({ url: '/meter/' + id, method: 'DELETE' });
+            wx.showToast({ title: '删除成功' });
+            this.loadList();
+          } catch (err) {
+            wx.showToast({ title: '删除失败', icon: 'none' });
+          }
+        }
+      }
+    });
   },
 
   goToAdd() {

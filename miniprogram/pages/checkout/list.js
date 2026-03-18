@@ -20,6 +20,10 @@ Page({
     this.loadList();
   },
 
+  onShow() {
+    this.loadList();
+  },
+
   async loadList() {
     try {
       const data = {};

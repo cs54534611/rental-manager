@@ -14,9 +14,10 @@ router.get('/', async (req, res) => {
                WHERE c.is_deleted = 0`;
     let params = [];
     
+    // 处理 status 参数：空字符串查全部，0查已终止，1查生效中
     if (status !== undefined && status !== '') {
       sql += ' AND c.status = ?';
-      params.push(status);
+      params.push(parseInt(status));
     }
     if (house_id) {
       sql += ' AND c.house_id = ?';
@@ -65,10 +66,28 @@ router.post('/', async (req, res) => {
       [contractNo, house_id, tenant_id, type || 1, start_date, end_date, monthly_rent, payment_method, deposit, attachment || '', remark || '']
     );
     
+    const contractId = result.insertId;
+    
     // 自动更新房源状态为已出租
     await db.query('UPDATE houses SET status = 1 WHERE id = ?', [house_id]);
     
-    res.json({ code: 0, message: '创建成功', data: { id: result.insertId, contract_no: contractNo } });
+    // 自动生成当月租金账单
+    try {
+      const period = new Date().toISOString().slice(0, 7); // YYYY-MM
+      const billNo = 'ZD-' + Date.now();
+      const dueDate = new Date();
+      dueDate.setDate(10); // 每月10日为到期日
+      
+      await db.query(
+        `INSERT INTO rentals (bill_no, contract_id, house_id, tenant_id, period, receivable, due_date, status) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, 0)`,
+        [billNo, contractId, house_id, tenant_id, period, monthly_rent, dueDate]
+      );
+    } catch (e) {
+      console.error('生成租金账单失败:', e);
+    }
+    
+    res.json({ code: 0, message: '创建成功', data: { id: contractId, contract_no: contractNo } });
   } catch (err) {
     res.status(500).json({ code: 1, message: err.message });
   }

@@ -1,2 +1,34 @@
 <!--pages/checkout/add.wxml-->
-<text>pages/checkout/add.wxml</text>
+<view class="container">
+  <view class="form">
+    <view class="form-item">
+      <text class="label">选择合同</text>
+      <picker mode="selector" range="{{contracts}}" range-key="contract_no" bindchange="onContractChange" value="{{contractIndex}}">
+        <view class="picker">
+          {{contractText || '请选择合同'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">预计退房日期</text>
+      <picker mode="date" bindchange="onDateChange">
+        <view class="picker">
+          {{checkoutDate || '请选择日期'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">押金金额</text>
+      <input class="input" type="digit" placeholder="请输入押金金额" value="{{deposit}}" bindinput="onDepositChange" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">备注</text>
+      <textarea class="textarea" placeholder="请输入备注" value="{{remark}}" bindinput="onRemarkChange"></textarea>
+    </view>
+
+    <button class="submit-btn" bindtap="handleSubmit">提交申请</button>
+  </view>
+</view>

@@ -42,7 +42,10 @@
       </view>
       <view class="meter-footer">
         <text class="recorded_by">录入人: {{item.recorded_by || '-'}}</text>
-        <button size="mini" bindtap="handleEdit" data-id="{{item.id}}">编辑</button>
+        <view class="actions">
+          <view class="edit" bindtap="handleEdit" data-id="{{item.id}}">编辑</view>
+          <view class="delete" bindtap="handleDelete" data-id="{{item.id}}">删除</view>
+        </view>
       </view>
     </view>
 

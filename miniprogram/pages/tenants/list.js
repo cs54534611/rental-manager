@@ -33,5 +33,24 @@ Page({
 
   goToAdd() {
     wx.navigateTo({ url: '/pages/tenants/add' });
+  },
+
+  onDelete(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要删除该租客吗？',
+      success: async (res) => {
+        if (res.confirm) {
+          try {
+            await app.request({ url: '/tenants/' + id, method: 'DELETE' });
+            wx.showToast({ title: '删除成功' });
+            this.loadTenants();
+          } catch (err) {
+            wx.showToast({ title: '删除失败', icon: 'none' });
+          }
+        }
+      }
+    });
   }
 });

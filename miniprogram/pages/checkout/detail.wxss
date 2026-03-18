@@ -1,0 +1,133 @@
+/* pages/checkout/detail.wxss */
+page { background: #f5f7fa; }
+.container { padding: 30rpx; }
+
+.header { text-align: center; margin-bottom: 30rpx; }
+.title { font-size: 36rpx; font-weight: 600; color: #333; }
+
+.card {
+  background: white;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15rpx 0;
+}
+
+.label { font-size: 28rpx; color: #666; }
+.value { font-size: 28rpx; color: #333; font-weight: 500; }
+
+.status0 { color: #f59e0b; }
+.status1 { color: #3b82f6; }
+.status2 { color: #10b981; }
+.status3 { color: #ef4444; }
+
+.danger { color: #ef4444; }
+.success { color: #10b981; }
+
+.remark {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.actions { margin-top: 40rpx; }
+.action-group { display: flex; gap: 20rpx; justify-content: center; }
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 40rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+
+.btn-danger {
+  flex: 1;
+  background: #ef4444;
+  color: white;
+  border-radius: 40rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+
+.btn-secondary {
+  background: #9ca3af;
+  color: white;
+  border-radius: 40rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+
+/* 弹窗 */
+.modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 999; }
+.modal-mask { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); }
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  background: white;
+  border-radius: 20rpx;
+  padding: 40rpx;
+}
+
+.modal-title { font-size: 32rpx; font-weight: 600; text-align: center; margin-bottom: 30rpx; }
+
+.picker {
+  background: #f5f5f5;
+  padding: 25rpx;
+  border-radius: 10rpx;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.form-item { margin-bottom: 25rpx; }
+.form-item .label { display: block; margin-bottom: 10rpx; font-size: 28rpx; }
+.input {
+  background: #f5f5f5;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}
+
+.refund {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 30rpx;
+}
+
+.modal-actions button {
+  flex: 1;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 28rpx;
+  border-radius: 35rpx;
+}
+
+.modal-actions .confirm {
+  background: #667eea;
+  color: white;
+}

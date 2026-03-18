@@ -1,2 +1,57 @@
 <!--pages/rentals/pay.wxml-->
-<text>pages/rentals/pay.wxml</text>
+<view class="container">
+  <view class="form">
+    <view class="form-item">
+      <text class="label">选择房源</text>
+      <picker mode="selector" range="{{contracts}}" range-key="label" bindchange="onContractChange" value="{{contractIndex}}">
+        <view class="picker">
+          {{contractText || '请选择房源'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">租金期间</text>
+      <picker mode="date" fields="month" bindchange="onPeriodChange">
+        <view class="picker">
+          {{period || '选择月份'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">应收金额</text>
+      <input class="input" type="digit" placeholder="请输入应收金额" value="{{receivable}}" bindinput="onReceivableChange" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">实收金额</text>
+      <input class="input" type="digit" placeholder="请输入实收金额" value="{{actual}}" bindinput="onActualChange" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">支付方式</text>
+      <picker mode="selector" range="{{paymentMethods}}" bindchange="onPaymentChange" value="{{paymentIndex}}">
+        <view class="picker">
+          {{paymentMethods[paymentIndex] || '请选择支付方式'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">实收日期</text>
+      <picker mode="date" bindchange="onPaidDateChange">
+        <view class="picker">
+          {{paidDate || '选择日期'}}
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-item">
+      <text class="label">备注</text>
+      <textarea class="textarea" placeholder="请输入备注" value="{{remark}}" bindinput="onRemarkChange"></textarea>
+    </view>
+
+    <button class="submit-btn" bindtap="onSubmit">确认记收</button>
+  </view>
+</view>

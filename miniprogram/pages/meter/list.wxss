@@ -121,6 +121,22 @@
   color: #999;
 }
 
+.actions { display: flex; gap: 16rpx; }
+.edit { 
+  font-size: 24rpx; 
+  color: #fff; 
+  background: #3b82f6; 
+  padding: 8rpx 20rpx; 
+  border-radius: 8rpx; 
+}
+.delete { 
+  font-size: 24rpx; 
+  color: #fff; 
+  background: #ef4444; 
+  padding: 8rpx 20rpx; 
+  border-radius: 8rpx; 
+}
+
 .empty {
   text-align: center;
   padding: 100rpx 0;

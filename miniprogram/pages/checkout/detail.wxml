@@ -4,22 +4,28 @@
     <text class="title">退房详情</text>
   </view>
 
+  <!-- 基本信息 -->
   <view class="card">
+    <view class="card-title">基本信息</view>
     <view class="row">
       <text class="label">合同编号</text>
-      <text class="value">{{detail.contract_no}}</text>
+      <text class="value">{{detail.contract_no || '-'}}</text>
     </view>
     <view class="row">
       <text class="label">房源</text>
-      <text class="value">{{detail.address}}</text>
+      <text class="value">{{detail.address || '-'}}</text>
     </view>
     <view class="row">
       <text class="label">租客</text>
-      <text class="value">{{detail.tenant_name}}</text>
+      <text class="value">{{detail.tenant_name || '-'}}</text>
     </view>
     <view class="row">
       <text class="label">申请时间</text>
-      <text class="value">{{detail.apply_date}}</text>
+      <text class="value">{{detail.apply_date || '-'}}</text>
+    </view>
+    <view class="row">
+      <text class="label">预约时间</text>
+      <text class="value">{{detail.check_date || '待预约'}}</text>
     </view>
     <view class="row">
       <text class="label">状态</text>
@@ -27,34 +33,89 @@
     </view>
   </view>
 
+  <!-- 押金信息 -->
   <view class="card">
+    <view class="card-title">押金结算</view>
     <view class="row">
       <text class="label">应收押金</text>
-      <text class="value">¥{{detail.deposit_expected}}</text>
+      <text class="value">¥{{detail.deposit_expected || 0}}</text>
     </view>
-    <view class="row">
+    <view class="row" wx:if="{{detail.status >= 2}}">
       <text class="label">扣款</text>
-      <text class="value danger">¥{{detail.deposit_deduct}}</text>
+      <text class="value danger">¥{{detail.deposit_deduct || 0}}</text>
     </view>
-    <view class="row">
+    <view class="row" wx:if="{{detail.status >= 2}}">
       <text class="label">扣款原因</text>
-      <text class="value">{{detail.deduct_reason}}</text>
+      <text class="value">{{detail.deduct_reason || '-'}}</text>
     </view>
-    <view class="row">
+    <view class="row" wx:if="{{detail.status >= 2}}">
       <text class="label">应退押金</text>
-      <text class="value success">¥{{detail.deposit_refund}}</text>
+      <text class="value success">¥{{detail.deposit_refund || 0}}</text>
     </view>
   </view>
 
+  <!-- 备注 -->
   <view class="card" wx:if="{{detail.remark}}">
-    <view class="row">
-      <text class="label">备注</text>
-      <text class="value">{{detail.remark}}</text>
+    <view class="card-title">备注</view>
+    <view class="remark">{{detail.remark}}</view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="actions">
+    <!-- 申请中: 预约/拒绝 -->
+    <view wx:if="{{detail.status == 0}}" class="action-group">
+      <button class="btn-primary" bindtap="showScheduleModal">预约退房时间</button>
+      <button class="btn-danger" bindtap="handleCancel">拒绝申请</button>
+    </view>
+
+    <!-- 已预约: 完成检查 -->
+    <view wx:if="{{detail.status == 1}}" class="action-group">
+      <button class="btn-primary" bindtap="showSettleModal">完成检查并结算</button>
+      <button class="btn-danger" bindtap="handleCancel">取消</button>
+    </view>
+
+    <!-- 已完成 -->
+    <view wx:if="{{detail.status == 2}}" class="action-group">
+      <button class="btn-secondary" bindtap="handleDelete">删除记录</button>
     </view>
   </view>
 
-  <view class="actions" wx:if="{{detail.status == 0}}">
-    <button class="btn-primary" bindtap="handlePass">通过</button>
-    <button class="btn-danger" bindtap="handleReject">拒绝</button>
+  <!-- 预约弹窗 -->
+  <view class="modal" wx:if="{{showScheduleModal}}">
+    <view class="modal-mask" bindtap="closeScheduleModal"></view>
+    <view class="modal-content">
+      <view class="modal-title">预约退房时间</view>
+      <picker mode="date" bindchange="onCheckDateChange">
+        <view class="picker">{{checkDate || '选择日期'}}</view>
+      </picker>
+      <view class="modal-actions">
+        <button bindtap="closeScheduleModal">取消</button>
+        <button class="confirm" bindtap="submitSchedule">确定</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 结算弹窗 -->
+  <view class="modal" wx:if="{{showSettleModal}}">
+    <view class="modal-mask" bindtap="closeSettleModal"></view>
+    <view class="modal-content">
+      <view class="modal-title">押金结算</view>
+      <view class="form-item">
+        <text class="label">扣款金额</text>
+        <input class="input" type="digit" placeholder="请输入扣款金额" value="{{depositDeduct}}" bindinput="onDeductChange" />
+      </view>
+      <view class="form-item">
+        <text class="label">扣款原因</text>
+        <input class="input" placeholder="请输入扣款原因" value="{{deductReason}}" bindinput="onReasonChange" />
+      </view>
+      <view class="form-item">
+        <text class="label">应退押金</text>
+        <text class="refund">¥{{refundAmount}}</text>
+      </view>
+      <view class="modal-actions">
+        <button bindtap="closeSettleModal">取消</button>
+        <button class="confirm" bindtap="submitSettle">确定结算</button>
+      </view>
+    </view>
   </view>
 </view>

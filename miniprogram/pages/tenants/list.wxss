@@ -47,6 +47,15 @@ page { background: #f5f7fa; }
 .status[status="1"] { background: #d1fae5; color: #059669; }
 .status[status="0"] { background: #fee2e2; color: #dc2626; }
 
+.right-actions { display: flex; align-items: center; gap: 16rpx; }
+.delete-btn, .delete { 
+  font-size: 24rpx; 
+  color: #fff; 
+  background: #ef4444; 
+  padding: 8rpx 20rpx; 
+  border-radius: 8rpx; 
+}
+
 .empty { text-align: center; padding: 100rpx; color: #999; }
 
 .add-btn {

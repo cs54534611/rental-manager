@@ -2,9 +2,9 @@
 <view class="container">
   <!-- 筛选 -->
   <view class="filter-bar">
-    <view class="filter-item {{status===''?'active':''}}" bindtap="onFilter" data-status="">全部</view>
-    <view class="filter-item {{status===1?'active':''}}" bindtap="onFilter" data-status="1">生效中</view>
-    <view class="filter-item {{status===0?'active':''}}" bindtap="onFilter" data-status="0">已终止</view>
+    <view class="filter-item {{status===''||status===undefined?'active':''}}" bindtap="onFilter" data-status="">全部</view>
+    <view class="filter-item {{status==1?'active':''}}" bindtap="onFilter" data-status="1">生效中</view>
+    <view class="filter-item {{status==2?'active':''}}" bindtap="onFilter" data-status="2">已终止</view>
   </view>
 
   <!-- 列表 -->
@@ -12,7 +12,7 @@
     <view class="item" wx:for="{{contracts}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
       <view class="item-header">
         <text class="no">{{item.contract_no}}</text>
-        <text class="status {{item.status}}">{{item.status===1?'生效中':'已终止'}}</text>
+        <text class="status {{item.status}}">{{item.status==1?'生效中':'已终止'}}</text>
       </view>
       <view class="item-body">
         <view class="row">
