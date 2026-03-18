@@ -7,17 +7,17 @@
 | 模块 | 功能 | 入口 |
 |------|------|------|
 | 房源管理 | 列表、详情、添加/编辑、照片上传、配套设施 | 首页 → 房源管理 |
-| 租客管理 | 列表、详情、添加/编辑 | 首页 → 租客管理 |
+| 租客管理 | 列表、详情、添加/编辑、删除 | 首页 → 租客管理 |
 | 合同管理 | 列表、详情、添加、续签、合同模板 | 首页 → 合同管理 |
-| 租金管理 | 列表、添加、逾期提醒、**在线支付** | 首页 → 租金管理 |
-| 报修管理 | 列表、详情、添加、照片上传、分配维修人员 | 首页 → 报修管理 |
+| 租金管理 | 列表、添加、记收、删除、逾期提醒 | 首页 → 租金管理 |
+| 报修管理 | 列表、详情、添加、删除 | 首页 → 报修管理 |
 | 维修人员 | 列表、添加/编辑、删除 | 首页 → 维修人员 |
 | 数据统计 | 概览、导出CSV、批量导入 | 首页 → 数据统计 |
 | 数据备份 | 手动/自动备份、还原 | 首页 → 数据备份 |
 | 系统设置 | 房东信息、租金提醒 | 首页 → 系统设置 |
-| **财务管理** | 收入统计、支付记录、**收款** | 首页 → 财务 |
-| **抄表记录** | 水电表录入、费用计算 | 首页 → 抄表 |
-| **退房检查** | 退房申请、物品检查、押金结算 | 首页 → 退房 |
+| 财务管理 | 收入统计、支付记录、收款 | 首页 → 财务 |
+| 抄表记录 | 水电表录入、费用计算、编辑、删除 | 首页 → 抄表 |
+| 退房检查 | 退房申请、预约、物品检查、押金结算 | 首页 → 退房 |
 
 ## 🛠️ 技术栈
 
@@ -57,7 +57,7 @@ npm start
 
 ### 4. 配置小程序
 1. 用**微信开发者工具**打开 `miniprogram/` 目录
-2. 修改 `app.js` 中的 `baseUrl` 为你的服务器地址
+2. 修改 `app.js` 中的 `apiBase` 为你的服务器地址
 3. 配置 AppID（可在微信公众平台申请测试号）
 
 ## 📁 项目结构
@@ -67,12 +67,12 @@ rental-manager/
 ├── miniprogram/          # 微信小程序前端
 │   └── pages/
 │       ├── index/        # 首页（功能入口）
-│       ├── houses/      # 房源管理
-│       ├── tenants/      # 租客管理
+│       ├── houses/       # 房源管理
+│       ├── tenants/       # 租客管理
 │       ├── contracts/    # 合同管理
 │       ├── rentals/      # 租金管理
 │       ├── payments/     # 支付/收款
-│       ├── repairs/      # 报修管理
+│       ├── repairs/       # 报修管理
 │       ├── staff/        # 维修人员
 │       ├── stats/        # 数据统计
 │       ├── finance/      # 财务管理
@@ -96,12 +96,19 @@ rental-manager/
 | `/api/houses` | GET/POST | 房源列表/添加 |
 | `/api/houses/:id` | GET/PUT/DELETE | 房源详情/更新/删除 |
 | `/api/tenants` | GET/POST | 租客列表/添加 |
+| `/api/tenants/:id` | GET/PUT/DELETE | 租客详情/更新/删除 |
 | `/api/contracts` | GET/POST | 合同列表/添加 |
+| `/api/contracts/:id` | GET/PUT/DELETE | 合同详情/更新/删除 |
 | `/api/contracts/renew/:id` | POST | 合同续签 |
 | `/api/rentals` | GET/POST | 租金列表/添加 |
+| `/api/rentals/:id` | GET/PUT/DELETE | 租金详情/更新/删除 |
 | `/api/rentals/generate` | POST | 批量生成账单 |
+| `/api/rentals/stats/pending` | GET | 待收租金统计 |
 | `/api/repairs` | GET/POST | 报修列表/添加 |
+| `/api/repairs/:id` | GET/PUT/DELETE | 报修详情/更新/删除 |
 | `/api/staff` | GET/POST | 维修人员列表/添加 |
+| `/api/staff/:id` | GET/PUT/DELETE | 维修人员详情/更新/删除 |
+| `/api/stats/overview` | GET | 经营概览 |
 | `/api/stats/export/:type` | GET | 导出CSV |
 | `/api/stats/import/:type` | POST | 批量导入 |
 | `/api/backup` | GET/POST | 备份列表/手动备份 |
@@ -117,8 +124,12 @@ rental-manager/
 | `/api/payments/refund` | POST | 退款 |
 | `/api/transactions` | GET/POST | 收支记录 |
 | `/api/meter` | GET/POST | 抄表记录 |
+| `/api/meter/:id` | GET/PUT/DELETE | 抄表详情/更新/删除 |
 | `/api/meter/calculate` | POST | 计算费用 |
-| `/api/checkout` | GET/POST | 退房检查 |
+| `/api/checkout` | GET/POST | 退房列表/申请 |
+| `/api/checkout/:id` | GET/PUT/DELETE | 退房详情/更新/删除 |
+| `/api/checkout/:id/book` | PUT | 预约退房时间 |
+| `/api/checkout/:id/complete` | PUT | 完成退房检查 |
 | `/api/notify/templates` | GET | 通知模板 |
 | `/api/notify/send` | POST | 发送通知 |
 | `/api/contract-templates` | GET/POST | 合同模板 |
@@ -165,16 +176,20 @@ rental-manager/
 - 自定义合同模板
 - 变量替换
 - 一键生成
+- 新建合同自动生成租金账单
 
 ### 7. 抄表记录 ✅
 - 水表记录
 - 电表记录
 - 自动计算费用
+- 编辑/删除功能
 
 ### 8. 退房检查 ✅
-- 退房申请
+- 退房申请（需先结清租金）
+- 预约退房时间
 - 物品检查清单
-- 押金结算
+- 押金结算（扣款/退款）
+- 合同状态自动变更
 
 ## 📄 License
 
