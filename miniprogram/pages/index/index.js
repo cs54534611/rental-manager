@@ -13,10 +13,18 @@ Page({
   },
 
   onLoad() {
+    // 检查登录状态
+    if (!app.globalData.token) {
+      return wx.redirectTo({ url: '/pages/login/index' });
+    }
     this.loadOverview();
   },
 
   onShow() {
+    // 检查登录状态
+    if (!app.globalData.token) {
+      return wx.redirectTo({ url: '/pages/login/index' });
+    }
     this.loadOverview();
   },
 

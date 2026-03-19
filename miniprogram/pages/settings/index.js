@@ -3,7 +3,8 @@ const app = getApp();
 
 Page({
   data: {
-    owner: {}
+    owner: {},
+    userInfo: {}
   },
 
   onLoad() {
@@ -11,6 +12,7 @@ Page({
   },
 
   onShow() {
+    this.setData({ userInfo: app.globalData.userInfo || {} });
     this.loadOwner();
   },
 
@@ -39,5 +41,18 @@ Page({
 
   goToBackup() {
     wx.navigateTo({ url: '/pages/backup/index' });
+  },
+
+  // 退出登录
+  onLogout() {
+    wx.showModal({
+      title: '确认退出',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          app.logout();
+        }
+      }
+    });
   }
 });

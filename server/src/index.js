@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
+const { auth, optionalAuth } = require('./middleware/auth');
+
 const housesRouter = require('./routes/houses');
 const tenantsRouter = require('./routes/tenants');
 const contractsRouter = require('./routes/contracts');
@@ -26,32 +28,39 @@ const { scheduleBackup } = require('./backup');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 中间件
-app.use(cors());
+// 中间件 - CORS配置更严格
+app.use(cors({
+  origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:8080', 'http://localhost:3000', 'http://127.0.0.1:8080'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // 静态文件服务（上传的图片）
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
-// 路由
-app.use('/api/houses', housesRouter);
-app.use('/api/tenants', tenantsRouter);
-app.use('/api/contracts', contractsRouter);
-app.use('/api/rentals', rentalsRouter);
-app.use('/api/repairs', repairsRouter);
-app.use('/api/stats', statsRouter);
-app.use('/api/settings', settingsRouter);
-app.use('/api/staff', staffRouter);
-app.use('/api/backup', backupRouter);
-app.use('/api/notify', notifyRouter);
-app.use('/api/upload', uploadRouter);
+// 路由 - 需要登录的接口
+app.use('/api/houses', auth, housesRouter);
+app.use('/api/tenants', auth, tenantsRouter);
+app.use('/api/contracts', auth, contractsRouter);
+app.use('/api/rentals', auth, rentalsRouter);
+app.use('/api/repairs', auth, repairsRouter);
+app.use('/api/stats', auth, statsRouter);
+app.use('/api/settings', auth, settingsRouter);
+app.use('/api/staff', auth, staffRouter);
+app.use('/api/backup', auth, backupRouter);
+app.use('/api/notify', auth, notifyRouter);
+app.use('/api/upload', auth, uploadRouter);
+app.use('/api/transactions', auth, transactionsRouter);
+app.use('/api/contract-templates', auth, contractTemplateRouter);
+app.use('/api/meter', auth, meterRouter);
+app.use('/api/checkout', auth, checkoutRouter);
+app.use('/api/payments', auth, paymentsRouter);
+
+// 公开接口 - 无需登录
 app.use('/api/auth', authRouter);
-app.use('/api/transactions', transactionsRouter);
-app.use('/api/contract-templates', contractTemplateRouter);
-app.use('/api/meter', meterRouter);
-app.use('/api/checkout', checkoutRouter);
-app.use('/api/payments', paymentsRouter);
 
 // 启用自动备份（每天凌晨2点，保留7天）
 scheduleBackup({ cron: '0 2 * * *', keepCount: 7 });

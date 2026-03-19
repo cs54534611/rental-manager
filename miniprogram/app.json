@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/login/index",
     "pages/index/index",
     "pages/houses/list",
     "pages/houses/detail",

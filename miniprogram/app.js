@@ -2,19 +2,63 @@
 App({
   globalData: {
     apiBase: 'http://192.168.0.139:3000/api',
-    userInfo: null
+    userInfo: null,
+    token: null
   },
   
   onLaunch() {
     // 检查登录状态
     this.checkLogin();
+    
+    // 如果未登录，跳转到登录页
+    if (!this.globalData.token) {
+      wx.reLaunch({ url: '/pages/login/index' });
+    }
   },
   
   checkLogin() {
     const token = wx.getStorageSync('token');
+    const userInfo = wx.getStorageSync('userInfo');
     if (token) {
       this.globalData.token = token;
+      this.globalData.userInfo = userInfo;
     }
+  },
+  
+  // 登录
+  login(username, password) {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: this.globalData.apiBase + '/auth/login',
+        method: 'POST',
+        data: { username, password },
+        header: { 'Content-Type': 'application/json' },
+        success: (res) => {
+          if (res.data.code === 0) {
+            const { token, user } = res.data.data;
+            this.globalData.token = token;
+            this.globalData.userInfo = user;
+            wx.setStorageSync('token', token);
+            wx.setStorageSync('userInfo', user);
+            resolve(res.data);
+          } else {
+            reject(res.data);
+          }
+        },
+        fail: (err) => {
+          reject(err);
+        }
+      });
+    });
+  },
+  
+  // 登出
+  logout() {
+    this.globalData.token = null;
+    this.globalData.userInfo = null;
+    wx.removeStorageSync('token');
+    wx.removeStorageSync('userInfo');
+    wx.reLaunch({ url: '/pages/login/index' });
   },
   
   // 封装请求方法
@@ -31,6 +75,14 @@ App({
         success: (res) => {
           if (res.data.code === 0) {
             resolve(res.data);
+          } else if (res.data.code === 401 || res.statusCode === 401) {
+            // token过期或无效，跳转登录
+            this.logout();
+            wx.showToast({ title: '请重新登录', icon: 'none' });
+            setTimeout(() => {
+              wx.reLaunch({ url: '/pages/login/index' });
+            }, 1500);
+            reject(res.data);
           } else {
             wx.showToast({
               title: res.data.message || '请求失败',

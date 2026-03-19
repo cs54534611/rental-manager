@@ -1,11 +1,11 @@
 <!-- miniprogram/pages/settings/index.wxml -->
 <view class="container">
-  <!-- 房东信息 -->
+  <!-- 用户信息 -->
   <view class="profile-card">
-    <view class="avatar">{{owner.name[0] || '房'}}</view>
+    <view class="avatar">{{userInfo.name ? userInfo.name[0] : '管'}}</view>
     <view class="info">
-      <text class="name">{{owner.name || '房东'}}</text>
-      <text class="phone">{{owner.phone || '未设置手机号'}}</text>
+      <text class="name">{{userInfo.name || userInfo.username || '管理员'}}</text>
+      <text class="phone">{{userInfo.phone || userInfo.role || ''}}</text>
     </view>
   </view>
 
@@ -39,4 +39,7 @@
       <text class="version">v1.0.0</text>
     </view>
   </view>
+
+  <!-- 退出登录 -->
+  <button class="btn-logout" bindtap="onLogout">退出登录</button>
 </view>
