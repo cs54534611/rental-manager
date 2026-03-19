@@ -61,6 +61,11 @@ Page({
     wx.navigateTo({ url: '/pages/admin/users' });
   },
 
+  // 角色权限查看
+  goToRoleCheck() {
+    wx.navigateTo({ url: '/pages/role/check' });
+  },
+
   // 退出登录
   onLogout() {
     wx.showModal({

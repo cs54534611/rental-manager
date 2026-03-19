@@ -218,4 +218,95 @@ router.put('/password', async (req, res) => {
   }
 });
 
+// 更新管理员信息
+router.put('/users/:id', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // 仅超级管理员可更新
+    if (decoded.role !== 'super') {
+      return res.status(403).json({ code: 1, message: '无权限' });
+    }
+    
+    const { role, name, phone, status } = req.body;
+    const userId = req.params.id;
+    
+    // 不能修改超级管理员
+    const [existing] = await db.query('SELECT username FROM admin_users WHERE id = ?', [userId]);
+    if (existing.length === 0) {
+      return res.status(404).json({ code: 1, message: '用户不存在' });
+    }
+    
+    if (existing[0].username === 'admin' && decoded.id != userId) {
+      return res.status(400).json({ code: 1, message: '不能修改超级管理员' });
+    }
+    
+    await db.query(
+      'UPDATE admin_users SET role = ?, name = ?, phone = ?, status = ? WHERE id = ?',
+      [role, name, phone, status, userId]
+    );
+    
+    res.json({ code: 0, message: '更新成功' });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
+// 删除管理员
+router.delete('/users/:id', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // 仅超级管理员可删除
+    if (decoded.role !== 'super') {
+      return res.status(403).json({ code: 1, message: '无权限' });
+    }
+    
+    const userId = req.params.id;
+    
+    // 不能删除自己
+    if (decoded.id == userId) {
+      return res.status(400).json({ code: 1, message: '不能删除自己' });
+    }
+    
+    // 不能删除超级管理员
+    const [existing] = await db.query('SELECT username FROM admin_users WHERE id = ?', [userId]);
+    if (existing.length > 0 && existing[0].username === 'admin') {
+      return res.status(400).json({ code: 1, message: '不能删除超级管理员' });
+    }
+    
+    await db.query('DELETE FROM admin_users WHERE id = ?', [userId]);
+    
+    res.json({ code: 0, message: '删除成功' });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
+// 获取当前用户信息
+router.get('/current', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token) {
+      return res.status(401).json({ code: 1, message: '未登录' });
+    }
+    
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const [rows] = await db.query(
+      'SELECT id, username, role, name, phone, avatar, status, last_login, created_at FROM admin_users WHERE id = ?',
+      [decoded.id]
+    );
+    
+    if (rows.length === 0) {
+      return res.status(404).json({ code: 1, message: '用户不存在' });
+    }
+    
+    res.json({ code: 0, data: rows[0] });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
 module.exports = router;

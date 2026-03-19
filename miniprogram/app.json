@@ -1,8 +1,10 @@
+// miniprogram/app.json
 {
   "pages": [
     "pages/login/index",
     "pages/index/index",
     "pages/admin/users",
+    "pages/role/check",
     "pages/houses/list",
     "pages/houses/detail",
     "pages/houses/add",

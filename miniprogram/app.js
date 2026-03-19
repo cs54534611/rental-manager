@@ -71,6 +71,12 @@ App({
     return this.globalData.role || wx.getStorageSync('role') || 'admin';
   },
   
+  // 检查是否是管理员
+  isAdmin() {
+    const role = this.getRole();
+    return role === 'super' || role === 'admin';
+  },
+  
   // 根据角色获取TabBar配置
   getTabBarConfig(role) {
     const configs = {
