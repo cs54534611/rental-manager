@@ -37,10 +37,25 @@ Page({
 
     try {
       const res = await app.login(username, password);
+      
+      // 根据角色跳转不同页面
+      const role = res.data.user.role;
+      
       wx.showToast({ title: '登录成功', icon: 'success' });
+      
       setTimeout(() => {
-        wx.switchTab({ url: '/pages/index/index' });
+        if (role === 'tenant') {
+          // 租客跳转到房源列表
+          wx.switchTab({ url: '/pages/houses/list' });
+        } else if (role === 'repair') {
+          // 维修人员跳转到报修列表
+          wx.switchTab({ url: '/pages/repairs/list' });
+        } else {
+          // 管理员/财务跳转到首页
+          wx.switchTab({ url: '/pages/index/index' });
+        }
       }, 1500);
+      
     } catch (err) {
       wx.showToast({ title: err.message || '登录失败', icon: 'none' });
     } finally {
