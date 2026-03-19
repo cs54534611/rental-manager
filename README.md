@@ -2,6 +2,12 @@
 
 > 微信小程序 + Node.js 后端 + MySQL 数据库
 
+## 🔐 默认登录账号
+
+| 账号 | 密码 | 角色 |
+|------|------|------|
+| admin | admin123 | 超级管理员 |
+
 ## 📱 功能模块
 
 | 模块 | 功能 | 入口 |
@@ -139,12 +145,34 @@ rental-manager/
 | 路由 | 方法 | 说明 |
 |------|------|------|
 | `/api/auth/login` | POST | 管理员登录 |
-| `/api/auth/logout` | POST | 登出 |
-| `/api/auth/current` | GET | 当前用户 |
+| `/api/auth/register` | POST | 注册管理员 |
+| `/api/auth/verify` | POST | 验证token |
+| `/api/auth/permissions` | GET | 获取权限 |
+| `/api/auth/users` | GET | 管理员列表 |
+| `/api/auth/users` | POST | 添加管理员 |
+| `/api/auth/password` | PUT | 修改密码 |
+
+### 健康检查
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/health` | GET | 服务健康检查 |
 
 ## 🔄 已实现功能详情
 
-### 1. 微信通知推送 ✅
+### 1. 登录认证 ✅
+- JWT token 认证
+- 密码 bcrypt 加密存储
+- 登录/登出功能
+- token 过期自动跳转登录
+
+### 2. 安全防护 ✅
+- 全局 API 认证中间件
+- CORS 跨域限制
+- 文件上传类型限制
+- SQL 参数化查询（防注入）
+- .env 敏感信息保护
+
+### 3. 微信通知推送 ✅
 - 租金到期提醒
 - 合同到期提醒
 - 报修状态通知
@@ -191,6 +219,18 @@ rental-manager/
 - 押金结算（扣款/退款）
 - 合同状态自动变更
 
-## 📄 License
+## 🧪 测试
+
+### 运行 API 测试
+```bash
+cd server
+node test/api-test.js
+```
+
+### 测试安全修复
+```bash
+cd server
+node test-security.js
+```
 
 MIT
