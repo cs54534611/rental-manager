@@ -91,17 +91,36 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 更新房源
+// 更新房源 - 支持部分更新
 router.put('/:id', async (req, res) => {
   try {
     const { community, address, layout, area, floor, orientation, decoration, rent, deposit, status, tags, photos, facilities, remark } = req.body;
     
-    await db.query(
-      `UPDATE houses SET community=?, address=?, layout=?, area=?, floor=?, orientation=?, decoration=?, rent=?, deposit=?, status=?, tags=?, photos=?, facilities=?, remark=? 
-       WHERE id=?`,
-      [community, address, layout, area, floor, orientation, decoration, rent, deposit, status, 
-       JSON.stringify(tags || []), JSON.stringify(photos || []), JSON.stringify(facilities || []), remark || '', req.params.id]
-    );
+    // 构建动态更新语句，只更新传入的字段
+    const updates = [];
+    const values = [];
+    
+    if (community !== undefined) { updates.push('community=?'); values.push(community); }
+    if (address !== undefined) { updates.push('address=?'); values.push(address); }
+    if (layout !== undefined) { updates.push('layout=?'); values.push(layout); }
+    if (area !== undefined) { updates.push('area=?'); values.push(area); }
+    if (floor !== undefined) { updates.push('floor=?'); values.push(floor); }
+    if (orientation !== undefined) { updates.push('orientation=?'); values.push(orientation); }
+    if (decoration !== undefined) { updates.push('decoration=?'); values.push(decoration); }
+    if (rent !== undefined) { updates.push('rent=?'); values.push(rent); }
+    if (deposit !== undefined) { updates.push('deposit=?'); values.push(deposit); }
+    if (status !== undefined) { updates.push('status=?'); values.push(status); }
+    if (tags !== undefined) { updates.push('tags=?'); values.push(JSON.stringify(tags)); }
+    if (photos !== undefined) { updates.push('photos=?'); values.push(JSON.stringify(photos)); }
+    if (facilities !== undefined) { updates.push('facilities=?'); values.push(JSON.stringify(facilities)); }
+    if (remark !== undefined) { updates.push('remark=?'); values.push(remark); }
+    
+    if (updates.length === 0) {
+      return res.json({ code: 0, message: '没有需要更新的字段' });
+    }
+    
+    values.push(req.params.id);
+    await db.query(`UPDATE houses SET ${updates.join(',')} WHERE id=?`, values);
     
     res.json({ code: 0, message: '更新成功' });
   } catch (err) {

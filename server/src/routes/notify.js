@@ -27,6 +27,27 @@ router.put('/templates/:type', async (req, res) => {
   }
 });
 
+// 创建通知模板
+router.post('/templates', async (req, res) => {
+  try {
+    const { type, template_id, title, content, enabled } = req.body;
+    
+    // 检查是否已存在
+    const [existing] = await db.query('SELECT id FROM notify_templates WHERE type = ?', [type]);
+    if (existing.length > 0) {
+      return res.status(400).json({ code: 1, message: '模板已存在，请使用PUT更新' });
+    }
+    
+    await db.query(
+      'INSERT INTO notify_templates (type, template_id, title, content, enabled) VALUES (?, ?, ?, ?, ?)',
+      [type, template_id, title, content, enabled !== undefined ? enabled : 1]
+    );
+    res.json({ code: 0, message: '创建成功' });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
 // 发送通知（模拟，实际需要对接微信）
 router.post('/send', async (req, res) => {
   try {

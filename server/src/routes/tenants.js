@@ -59,16 +59,31 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 更新租客
+// 更新租客 - 支持部分更新
 router.put('/:id', async (req, res) => {
   try {
     const { name, gender, phone, id_card, emergency_contact, emergency_phone, avatar, remark, status } = req.body;
     
-    await db.query(
-      `UPDATE tenants SET name=?, gender=?, phone=?, id_card=?, emergency_contact=?, emergency_phone=?, avatar=?, remark=?, status=? 
-       WHERE id=?`,
-      [name, gender, phone, id_card, emergency_contact, emergency_phone, avatar || '', remark || '', status || 1, req.params.id]
-    );
+    // 构建动态更新语句，只更新传入的字段
+    const updates = [];
+    const values = [];
+    
+    if (name !== undefined) { updates.push('name=?'); values.push(name); }
+    if (gender !== undefined) { updates.push('gender=?'); values.push(gender); }
+    if (phone !== undefined) { updates.push('phone=?'); values.push(phone); }
+    if (id_card !== undefined) { updates.push('id_card=?'); values.push(id_card); }
+    if (emergency_contact !== undefined) { updates.push('emergency_contact=?'); values.push(emergency_contact); }
+    if (emergency_phone !== undefined) { updates.push('emergency_phone=?'); values.push(emergency_phone); }
+    if (avatar !== undefined) { updates.push('avatar=?'); values.push(avatar); }
+    if (remark !== undefined) { updates.push('remark=?'); values.push(remark); }
+    if (status !== undefined) { updates.push('status=?'); values.push(status); }
+    
+    if (updates.length === 0) {
+      return res.json({ code: 0, message: '没有需要更新的字段' });
+    }
+    
+    values.push(req.params.id);
+    await db.query(`UPDATE tenants SET ${updates.join(',')} WHERE id=?`, values);
     
     res.json({ code: 0, message: '更新成功' });
   } catch (err) {
