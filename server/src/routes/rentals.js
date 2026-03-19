@@ -7,6 +7,9 @@ const db = require('../db');
 router.get('/', async (req, res) => {
   try {
     const { status, house_id, period, page = 1, pageSize = 20 } = req.query;
+    const userRole = req.user?.role || '';
+    const userId = req.user?.id;
+    
     let sql = `SELECT r.*, h.community, h.address, t.name as tenant_name 
                FROM rentals r 
                LEFT JOIN houses h ON r.house_id = h.id 
@@ -14,16 +17,30 @@ router.get('/', async (req, res) => {
                WHERE r.is_deleted = 0`;
     let params = [];
     
+    // 租客只能看自己的租金
+    if (userRole === 'tenant') {
+      const [tenantResult] = await db.query(
+        'SELECT id FROM tenants WHERE phone = (SELECT phone FROM admin_users WHERE id = ?)',
+        [userId]
+      );
+      if (tenantResult.length > 0) {
+        sql += ' AND r.tenant_id = ?';
+        params.push(tenantResult[0].id);
+      } else {
+        return res.json({ code: 0, data: { list: [], total: 0 } });
+      }
+    }
+    
     // 容错处理：status 可能为空字符串
-    if (status !== undefined && status !== '' && status !== null) {
+    if (status !== undefined && status !== '' && status !== null && userRole !== 'tenant') {
       sql += ' AND r.status = ?';
       params.push(parseInt(status));
     }
-    if (house_id) {
+    if (house_id && userRole !== 'tenant') {
       sql += ' AND r.house_id = ?';
       params.push(parseInt(house_id));
     }
-    if (period) {
+    if (period && userRole !== 'tenant') {
       sql += ' AND r.period = ?';
       params.push(period);
     }

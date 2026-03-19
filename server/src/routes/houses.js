@@ -8,20 +8,44 @@ const { v4: uuidv4 } = require('uuid');
 router.get('/', async (req, res) => {
   try {
     const { status, keyword, page = 1, pageSize = 20 } = req.query;
+    const userRole = req.user?.role || '';
+    const userId = req.user?.id;
+    
     let sql = 'SELECT * FROM houses WHERE is_deleted = 0';
     let params = [];
     
-    if (status !== undefined && status !== '') {
+    // 租客只能看自己租的房源
+    if (userRole === 'tenant') {
+      // 通过合同获取租客租的房源
+      sql = `SELECT h.* FROM houses h 
+             INNER JOIN contracts c ON h.id = c.house_id 
+             WHERE h.is_deleted = 0 AND c.tenant_id = ? AND c.status = 1 
+             AND c.start_date <= CURDATE() AND c.end_date >= CURDATE()`;
+      // 获取租客对应的 tenant_id
+      const [tenantResult] = await db.query(
+        'SELECT id FROM tenants WHERE phone = (SELECT phone FROM admin_users WHERE id = ?)',
+        [userId]
+      );
+      if (tenantResult.length > 0) {
+        params.push(tenantResult[0].id);
+      } else {
+        return res.json({ code: 0, data: { list: [], total: 0 } });
+      }
+    }
+    
+    if (status !== undefined && status !== '' && userRole !== 'tenant') {
       sql += ' AND status = ?';
       params.push(status);
     }
-    if (keyword) {
+    if (keyword && userRole !== 'tenant') {
       sql += ' AND (community LIKE ? OR address LIKE ? OR house_no LIKE ?)';
       params.push(`%${keyword}%`, `%${keyword}%`, `%${keyword}%`);
     }
     
-    sql += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
-    params.push(parseInt(pageSize), (parseInt(page) - 1) * parseInt(pageSize));
+    if (userRole !== 'tenant') {
+      sql += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
+      params.push(parseInt(pageSize), (parseInt(page) - 1) * parseInt(pageSize));
+    }
     
     const [rows] = await db.query(sql, params);
     

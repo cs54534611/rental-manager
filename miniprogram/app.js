@@ -27,12 +27,12 @@ App({
   },
   
   // 登录
-  login(username, password) {
+  login(username, password, loginType = 'admin') {
     return new Promise((resolve, reject) => {
       wx.request({
         url: this.globalData.apiBase + '/auth/login',
         method: 'POST',
-        data: { username, password },
+        data: { username, password, loginType },
         header: { 'Content-Type': 'application/json' },
         success: (res) => {
           if (res.data.code === 0) {

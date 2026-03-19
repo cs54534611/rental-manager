@@ -5,6 +5,7 @@ Page({
   data: {
     username: '',
     password: '',
+    loginType: 'admin',  // admin 或 tenant
     loading: false
   },
 
@@ -23,11 +24,15 @@ Page({
     this.setData({ password: e.detail.value });
   },
 
+  onLoginTypeChange(e) {
+    this.setData({ loginType: e.detail.value, username: '', password: '' });
+  },
+
   async onLogin() {
-    const { username, password } = this.data;
+    const { username, password, loginType } = this.data;
     
     if (!username) {
-      return wx.showToast({ title: '请输入用户名', icon: 'none' });
+      return wx.showToast({ title: loginType === 'tenant' ? '请输入手机号' : '请输入用户名', icon: 'none' });
     }
     if (!password) {
       return wx.showToast({ title: '请输入密码', icon: 'none' });
@@ -36,7 +41,7 @@ Page({
     this.setData({ loading: true });
 
     try {
-      const res = await app.login(username, password);
+      const res = await app.login(username, password, loginType);
       
       // 根据角色跳转不同页面
       const role = res.data.user.role;

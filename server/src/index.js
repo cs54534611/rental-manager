@@ -5,6 +5,8 @@ const cors = require('cors');
 const path = require('path');
 
 const { auth, optionalAuth } = require('./middleware/auth');
+const rateLimiter = require('./middleware/rateLimit');
+const logger = require('./middleware/logger');
 
 const housesRouter = require('./routes/houses');
 const tenantsRouter = require('./routes/tenants');
@@ -28,6 +30,12 @@ const { scheduleBackup } = require('./backup');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// 中间件 - 请求限流
+app.use(rateLimiter());
+
+// 中间件 - 请求日志
+app.use(logger);
+
 // 中间件 - CORS配置更严格
 app.use(cors({
   origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:8080', 'http://localhost:3000', 'http://127.0.0.1:8080'],
@@ -40,6 +48,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // 静态文件服务（上传的图片）
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
+// 路由 - 登录接口单独限流（更严格）
+app.use('/api/auth/login', rateLimiter({ windowMs: 60 * 1000, maxRequests: 10 }));
 
 // 路由 - 需要登录的接口
 app.use('/api/houses', auth, housesRouter);

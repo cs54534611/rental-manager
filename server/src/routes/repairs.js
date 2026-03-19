@@ -7,6 +7,9 @@ const db = require('../db');
 router.get('/', async (req, res) => {
   try {
     const { status, house_id, page = 1, pageSize = 20 } = req.query;
+    const userRole = req.user?.role || '';
+    const userId = req.user?.id;
+    
     let sql = `SELECT r.*, h.community, h.address, t.name as tenant_name, t.phone as tenant_phone 
                FROM repairs r 
                LEFT JOIN houses h ON r.house_id = h.id 
@@ -14,18 +17,34 @@ router.get('/', async (req, res) => {
                WHERE r.is_deleted = 0`;
     let params = [];
     
-    // 容错处理
-    if (status !== undefined && status !== '' && status !== null) {
+    // 租客只能看自己提交的报修，维修人员看全部
+    if (userRole === 'tenant') {
+      const [tenantResult] = await db.query(
+        'SELECT id FROM tenants WHERE phone = (SELECT phone FROM admin_users WHERE id = ?)',
+        [userId]
+      );
+      if (tenantResult.length > 0) {
+        sql += ' AND r.tenant_id = ?';
+        params.push(tenantResult[0].id);
+      } else {
+        return res.json({ code: 0, data: { list: [], total: 0 } });
+      }
+    }
+    
+    // 容错处理 - 维修人员可以看全部，租客只能看自己的
+    if (status !== undefined && status !== '' && status !== null && userRole !== 'tenant') {
       sql += ' AND r.status = ?';
       params.push(parseInt(status));
     }
-    if (house_id) {
+    if (house_id && userRole !== 'tenant') {
       sql += ' AND r.house_id = ?';
       params.push(parseInt(house_id));
     }
     
-    sql += ' ORDER BY r.created_at DESC LIMIT ? OFFSET ?';
-    params.push(parseInt(pageSize) || 20, ((parseInt(page) || 1) - 1) * (parseInt(pageSize) || 20));
+    if (userRole !== 'tenant') {
+      sql += ' ORDER BY r.created_at DESC LIMIT ? OFFSET ?';
+      params.push(parseInt(pageSize) || 20, ((parseInt(page) || 1) - 1) * (parseInt(pageSize) || 20));
+    }
     
     const [rows] = await db.query(sql, params);
     
@@ -84,12 +103,26 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { house_id, tenant_id, type, urgency, description, photos, expected_time, remark } = req.body;
+    const userRole = req.user?.role || '';
+    const userId = req.user?.id;
     const repairNo = 'BX-' + Date.now();
+    
+    // 如果是租客自动填充 tenant_id
+    let finalTenantId = tenant_id;
+    if (userRole === 'tenant') {
+      const [tenantResult] = await db.query(
+        'SELECT id FROM tenants WHERE phone = (SELECT phone FROM admin_users WHERE id = ?)',
+        [userId]
+      );
+      if (tenantResult.length > 0) {
+        finalTenantId = tenantResult[0].id;
+      }
+    }
     
     const [result] = await db.query(
       `INSERT INTO repairs (repair_no, house_id, tenant_id, type, urgency, description, photos, expected_time, remark) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [repairNo, house_id, tenant_id, type, urgency, description, JSON.stringify(photos || []), expected_time, remark || '']
+      [repairNo, house_id, finalTenantId, type, urgency, description, JSON.stringify(photos || []), expected_time, remark || '']
     );
     
     res.json({ code: 0, message: '提交成功', data: { id: result.insertId, repair_no: repairNo } });

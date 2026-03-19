@@ -4,8 +4,20 @@
   </view>
   
   <view class="form">
+    <!-- 登录类型选择 -->
+    <view class="login-type">
+      <radio-group bindchange="onLoginTypeChange">
+        <label class="type-option">
+          <radio value="admin" checked="{{loginType === 'admin'}}" />管理员
+        </label>
+        <label class="type-option">
+          <radio value="tenant" checked="{{loginType === 'tenant'}}" />租客
+        </label>
+      </radio-group>
+    </view>
+    
     <view class="form-item">
-      <input class="input" placeholder="请输入用户名" bindinput="onUsernameInput" value="{{username}}" />
+      <input class="input" placeholder="{{loginType === 'tenant' ? '请输入手机号' : '请输入用户名'}}" bindinput="onUsernameInput" value="{{username}}" />
     </view>
     <view class="form-item">
       <input class="input" password placeholder="请输入密码" bindinput="onPasswordInput" value="{{password}}" />

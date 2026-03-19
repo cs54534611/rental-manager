@@ -7,6 +7,9 @@ const db = require('../db');
 router.get('/', async (req, res) => {
   try {
     const { status, house_id, page = 1, pageSize = 20 } = req.query;
+    const userRole = req.user?.role || '';
+    const userId = req.user?.id;
+    
     let sql = `SELECT c.*, h.community, h.address, h.layout, t.name as tenant_name, t.phone as tenant_phone 
                FROM contracts c 
                LEFT JOIN houses h ON c.house_id = h.id 
@@ -14,18 +17,35 @@ router.get('/', async (req, res) => {
                WHERE c.is_deleted = 0`;
     let params = [];
     
+    // 租客只能看自己的合同
+    if (userRole === 'tenant') {
+      // 通过手机号查找租客
+      const [tenantResult] = await db.query(
+        'SELECT id FROM tenants WHERE phone = (SELECT phone FROM admin_users WHERE id = ?)',
+        [userId]
+      );
+      if (tenantResult.length > 0) {
+        sql += ' AND c.tenant_id = ?';
+        params.push(tenantResult[0].id);
+      } else {
+        return res.json({ code: 0, data: { list: [], total: 0 } });
+      }
+    }
+    
     // 处理 status 参数：空字符串查全部，0查已终止，1查生效中
-    if (status !== undefined && status !== '') {
+    if (status !== undefined && status !== '' && userRole !== 'tenant') {
       sql += ' AND c.status = ?';
       params.push(parseInt(status));
     }
-    if (house_id) {
+    if (house_id && userRole !== 'tenant') {
       sql += ' AND c.house_id = ?';
       params.push(house_id);
     }
     
-    sql += ' ORDER BY c.created_at DESC LIMIT ? OFFSET ?';
-    params.push(parseInt(pageSize), (parseInt(page) - 1) * parseInt(pageSize));
+    if (userRole !== 'tenant') {
+      sql += ' ORDER BY c.created_at DESC LIMIT ? OFFSET ?';
+      params.push(parseInt(pageSize), (parseInt(page) - 1) * parseInt(pageSize));
+    }
     
     const [rows] = await db.query(sql, params);
     res.json({ code: 0, data: { list: rows, total: rows.length } });

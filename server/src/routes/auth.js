@@ -11,39 +11,75 @@ const SALT_ROUNDS = 10;
 // 登录
 router.post('/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, loginType } = req.body;
     
     if (!username || !password) {
       return res.status(400).json({ code: 1, message: '请输入用户名和密码' });
     }
     
-    const [rows] = await db.query(
-      'SELECT id, username, password, role, name, phone, avatar, status FROM admin_users WHERE username = ?',
-      [username]
-    );
+    let user = null;
     
-    if (rows.length === 0) {
-      return res.status(401).json({ code: 1, message: '用户名或密码错误' });
+    // 如果是租客登录（通过手机号）
+    if (loginType === 'tenant') {
+      // 通过手机号查找租客
+      const [tenants] = await db.query(
+        'SELECT t.*, a.id as admin_id, a.password as admin_password FROM tenants t LEFT JOIN admin_users a ON t.phone = a.phone WHERE t.phone = ?',
+        [username]
+      );
+      
+      if (tenants.length === 0) {
+        return res.status(401).json({ code: 1, message: '租客不存在' });
+      }
+      
+      const tenant = tenants[0];
+      
+      // 如果租客有关联的管理员账号，用管理员账号验证
+      if (tenant.admin_id) {
+        const passwordMatch = await bcrypt.compare(password, tenant.admin_password);
+        if (!passwordMatch) {
+          return res.status(401).json({ code: 1, message: '密码错误' });
+        }
+        user = { id: tenant.admin_id, username: tenant.phone, role: 'tenant', name: tenant.name };
+      } else {
+        // 如果没有关联，创建临时验证（生产环境应该改进）
+        return res.status(401).json({ code: 1, message: '租客账号未绑定，请联系管理员' });
+      }
+    } else {
+      // 管理员登录
+      const [rows] = await db.query(
+        'SELECT id, username, password, role, name, phone, avatar, status FROM admin_users WHERE username = ?',
+        [username]
+      );
+      
+      if (rows.length === 0) {
+        return res.status(401).json({ code: 1, message: '用户名或密码错误' });
+      }
+      
+      const row = rows[0];
+      
+      // 验证密码
+      const passwordMatch = await bcrypt.compare(password, row.password);
+      if (!passwordMatch) {
+        return res.status(401).json({ code: 1, message: '用户名或密码错误' });
+      }
+      
+      if (row.status === 0) {
+        return res.status(403).json({ code: 1, message: '账号已被禁用' });
+      }
+      
+      user = { id: row.id, username: row.username, role: row.role, name: row.name };
     }
     
-    const user = rows[0];
-    
-    // 验证密码
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ code: 1, message: '用户名或密码错误' });
-    }
-    
-    if (user.status === 0) {
-      return res.status(403).json({ code: 1, message: '账号已被禁用' });
+    if (!user) {
+      return res.status(401).json({ code: 1, message: '登录失败' });
     }
     
     // 更新最后登录时间
     await db.query('UPDATE admin_users SET last_login = NOW() WHERE id = ?', [user.id]);
     
-    // 生成token（包含角色信息）
+    // 生成token
     const token = jwt.sign(
-      { id: user.id, username: user.username, role: user.role || 'admin' },
+      { id: user.id, username: user.username, role: user.role },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -57,8 +93,8 @@ router.post('/login', async (req, res) => {
           username: user.username,
           role: user.role,
           name: user.name,
-          phone: user.phone,
-          avatar: user.avatar
+          phone: user.phone || null,
+          avatar: null
         }
       }
     });
