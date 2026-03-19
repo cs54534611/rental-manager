@@ -3,6 +3,7 @@ const app = getApp();
 
 Page({
   data: {
+    isTenant: false,
     stats: {
       totalIncome: 0,
       monthIncome: 0,
@@ -14,10 +15,22 @@ Page({
   },
 
   onLoad() {
+    this.setData({ isTenant: app.globalData.role === 'tenant' });
+    if (app.globalData.role === 'tenant') {
+      wx.showToast({ title: '无权限访问', icon: 'none' });
+      setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1500);
+      return;
+    }
     this.loadStats();
   },
 
   onShow() {
+    this.setData({ isTenant: app.globalData.role === 'tenant' });
+    if (app.globalData.role === 'tenant') {
+      wx.showToast({ title: '无权限访问', icon: 'none' });
+      setTimeout(() => wx.switchTab({ url: '/pages/index/index' }), 1500);
+      return;
+    }
     this.loadStats();
   },
 

@@ -43,6 +43,10 @@ App({
             wx.setStorageSync('token', token);
             wx.setStorageSync('userInfo', user);
             wx.setStorageSync('role', user.role);
+            
+            // 保存角色可访问的页面
+            this.saveAllowedPages(user.role);
+            
             resolve(res.data);
           } else {
             reject(res.data);
@@ -53,6 +57,50 @@ App({
         }
       });
     });
+  },
+  
+  // 检查页面是否有权限访问
+  checkPagePermission(url) {
+    const role = this.getRole();
+    
+    // 管理员和超级管理员可以访问所有页面
+    if (role === 'super' || role === 'admin' || role === 'finance') {
+      return true;
+    }
+    
+    // 租客只能访问特定页面
+    if (role === 'tenant') {
+      const tenantPages = [
+        '/pages/houses/list',
+        '/pages/contracts/list',
+        '/pages/rentals/list',
+        '/pages/repairs/list'
+      ];
+      return tenantPages.some(p => url.includes(p));
+    }
+    
+    // 维修人员只能访问报修和抄表
+    if (role === 'repair') {
+      const repairPages = [
+        '/pages/repairs/list',
+        '/pages/meter/list'
+      ];
+      return repairPages.some(p => url.includes(p));
+    }
+    
+    return true;
+  },
+  
+  // 保存角色可访问的页面
+  saveAllowedPages(role) {
+    const allowedPages = {
+      'super': ['/pages/index/index', '/pages/houses/list', '/pages/rentals/list', '/pages/finance/index', '/pages/settings/index', '/pages/admin/users', '/pages/stats/index', '/pages/staff/list', '/pages/backup/index'],
+      'admin': ['/pages/index/index', '/pages/houses/list', '/pages/rentals/list', '/pages/finance/index', '/pages/settings/index', '/pages/stats/index', '/pages/staff/list', '/pages/backup/index'],
+      'finance': ['/pages/houses/list', '/pages/rentals/list', '/pages/finance/index', '/pages/settings/index'],
+      'repair': ['/pages/repairs/list', '/pages/meter/list', '/pages/settings/index'],
+      'tenant': ['/pages/houses/list', '/pages/contracts/list', '/pages/rentals/list', '/pages/repairs/list', '/pages/settings/index']
+    };
+    wx.setStorageSync('allowedPages', allowedPages[role] || allowedPages['admin']);
   },
   
   // 登出

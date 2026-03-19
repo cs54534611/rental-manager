@@ -1,9 +1,9 @@
 <!-- miniprogram/pages/index/index.wxml -->
 <view class="container">
-  <!-- 头部 - 根据角色显示不同标题 -->
+  <!-- 头部 -->
   <view class="header">
     <view class="header-title">{{isTenant ? '我的租房' : '租房管理系统'}}</view>
-    <view class="header-subtitle">{{overview.income.actual > 0 ? '本月收入 ' + overview.income.actual + ' 元' : '欢迎使用'}}</view>
+    <view class="header-subtitle">{{isTenant ? '欢迎回来' : (overview.income.actual > 0 ? '本月收入 ' + overview.income.actual + ' 元' : '欢迎使用')}}</view>
   </view>
 
   <!-- 加载状态 -->
@@ -13,16 +13,18 @@
 
   <view wx:else>
     <!-- 租客视图 -->
-    <view wx:if="{{isTenant}}" class="section">
-      <view class="section-title">🏠 我的房源</view>
-      <view class="stats-grid">
-        <view class="stat-card">
-          <view class="stat-value">{{overview.houses.rented || 0}}</view>
-          <view class="stat-label">在租房源</view>
-        </view>
-        <view class="stat-card">
-          <view class="stat-value primary">{{overview.income.receivable || 0}}</view>
-          <view class="stat-label">本月租金</view>
+    <view wx:if="{{isTenant}}">
+      <view class="section">
+        <view class="section-title">🏠 我的房源</view>
+        <view class="stats-grid">
+          <view class="stat-card">
+            <view class="stat-value">{{overview.houses.rented || 0}}</view>
+            <view class="stat-label">在租房源</view>
+          </view>
+          <view class="stat-card">
+            <view class="stat-value primary">{{overview.income.receivable || 0}}</view>
+            <view class="stat-label">本月租金</view>
+          </view>
         </view>
       </view>
     </view>
@@ -116,7 +118,7 @@
             <text>租客管理</text>
           </view>
           <view class="quick-item" bindtap="goToStaff">
-            <view class="quick-icon">🔧</view>
+            <view class="quick-icon">👷</view>
             <text>维修人员</text>
           </view>
           <view class="quick-item" bindtap="goToBackup">

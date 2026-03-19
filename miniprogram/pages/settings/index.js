@@ -5,27 +5,33 @@ Page({
   data: {
     owner: {},
     userInfo: {},
-    isAdmin: false
+    isAdmin: false,
+    isTenant: false
   },
 
   onLoad() {
-    this.checkRole();
+    const role = app.globalData.role || wx.getStorageSync('role');
+    this.setData({ 
+      isTenant: role === 'tenant',
+      isAdmin: role === 'super' || role === 'admin'
+    });
     this.loadOwner();
   },
 
   onShow() {
     this.setData({ 
       userInfo: app.globalData.userInfo || {},
-      role: app.globalData.role || wx.getStorageSync('role')
+      isTenant: (app.globalData.role || wx.getStorageSync('role')) === 'tenant',
+      isAdmin: (app.globalData.role || wx.getStorageSync('role')) === 'super' || (app.globalData.role || wx.getStorageSync('role')) === 'admin'
     });
-    this.checkRole();
     this.loadOwner();
   },
 
   checkRole() {
     const role = app.getRole();
     this.setData({ 
-      isAdmin: role === 'super' || role === 'admin'
+      isAdmin: role === 'super' || role === 'admin',
+      isTenant: role === 'tenant'
     });
   },
 

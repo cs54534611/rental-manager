@@ -21,28 +21,41 @@ router.post('/login', async (req, res) => {
     
     // 如果是租客登录（通过手机号）
     if (loginType === 'tenant') {
-      // 通过手机号查找租客
-      const [tenants] = await db.query(
-        'SELECT t.*, a.id as admin_id, a.password as admin_password FROM tenants t LEFT JOIN admin_users a ON t.phone = a.phone WHERE t.phone = ?',
-        [username]
-      );
-      
-      if (tenants.length === 0) {
-        return res.status(401).json({ code: 1, message: '租客不存在' });
-      }
-      
-      const tenant = tenants[0];
-      
-      // 如果租客有关联的管理员账号，用管理员账号验证
-      if (tenant.admin_id) {
-        const passwordMatch = await bcrypt.compare(password, tenant.admin_password);
+      try {
+        // 先通过手机号查找租客
+        const [tenants] = await db.query(
+          'SELECT * FROM tenants WHERE phone = ?',
+          [username]
+        );
+        
+        if (tenants.length === 0) {
+          return res.status(401).json({ code: 1, message: '租客不存在' });
+        }
+        
+        const tenant = tenants[0];
+        
+        // 再通过手机号查找关联的管理员账号
+        const [admins] = await db.query(
+          'SELECT * FROM admin_users WHERE phone = ?',
+          [username]
+        );
+        
+        if (admins.length === 0) {
+          return res.status(401).json({ code: 1, message: '租客账号未绑定，请联系管理员' });
+        }
+        
+        const admin = admins[0];
+        
+        // 验证密码
+        const passwordMatch = await bcrypt.compare(password, admin.password);
         if (!passwordMatch) {
           return res.status(401).json({ code: 1, message: '密码错误' });
         }
-        user = { id: tenant.admin_id, username: tenant.phone, role: 'tenant', name: tenant.name };
-      } else {
-        // 如果没有关联，创建临时验证（生产环境应该改进）
-        return res.status(401).json({ code: 1, message: '租客账号未绑定，请联系管理员' });
+        
+        user = { id: admin.id, username: tenant.phone, role: 'tenant', name: tenant.name, phone: tenant.phone };
+      } catch (err) {
+        console.error('租客登录错误:', err);
+        return res.status(500).json({ code: 1, message: '登录失败: ' + err.message });
       }
     } else {
       // 管理员登录

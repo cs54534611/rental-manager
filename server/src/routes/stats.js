@@ -6,6 +6,66 @@ const db = require('../db');
 // 获取首页概览数据
 router.get('/overview', async (req, res) => {
   try {
+    const userRole = req.user?.role || '';
+    const userId = req.user?.id;
+    
+    // 租客：只返回自己的数据
+    if (userRole === 'tenant') {
+      try {
+        // 先获取用户手机号
+        const [userResult] = await db.query(
+          'SELECT phone FROM admin_users WHERE id = ?',
+          [userId]
+        );
+        
+        if (userResult.length === 0) {
+          return res.json({ code: 0, data: { houses: { rented: 0 }, income: { receivable: 0 } } });
+        }
+        
+        const phone = userResult[0].phone;
+        
+        // 通过手机号获取租客ID
+        const [tenantResult] = await db.query(
+          'SELECT id FROM tenants WHERE phone = ?',
+          [phone]
+        );
+        
+        if (tenantResult.length === 0) {
+          return res.json({ code: 0, data: { houses: { rented: 0 }, income: { receivable: 0 } } });
+        }
+        
+        const tenantId = tenantResult[0].id;
+        
+        // 租客在租房源数量
+        const [[{ rented }]] = await db.query(
+          `SELECT COUNT(*) as rented FROM contracts c 
+           INNER JOIN houses h ON c.house_id = h.id 
+           WHERE c.tenant_id = ? AND c.status = 1 
+           AND c.start_date <= CURDATE() AND c.end_date >= CURDATE() AND c.is_deleted = 0`,
+          [tenantId]
+        );
+        
+        // 本月租金
+        const currentMonth = new Date().toISOString().slice(0, 7);
+        const [[{ receivable }]] = await db.query(
+          'SELECT COALESCE(SUM(receivable), 0) as receivable FROM rentals WHERE tenant_id = ? AND period = ? AND is_deleted = 0',
+          [tenantId, currentMonth]
+        );
+        
+        return res.json({
+          code: 0,
+          data: {
+            houses: { rented: rented || 0 },
+            income: { receivable: receivable || 0 }
+          }
+        });
+      } catch (err) {
+        console.error('租客概览数据错误:', err);
+        return res.json({ code: 0, data: { houses: { rented: 0 }, income: { receivable: 0 } } });
+      }
+    }
+    
+    // 管理员：返回全部数据
     // 房源统计
     const [[{ total }]] = await db.query('SELECT COUNT(*) as total FROM houses WHERE is_deleted = 0');
     const [[{ rented }]] = await db.query('SELECT COUNT(*) as rented FROM houses WHERE status = 1 AND is_deleted = 0');

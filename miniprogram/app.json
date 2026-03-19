@@ -70,6 +70,11 @@
       }
     ]
   },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于查看房源位置"
+    }
+  },
   "style": "v2",
   "sitemapLocation": "sitemap.json"
 }

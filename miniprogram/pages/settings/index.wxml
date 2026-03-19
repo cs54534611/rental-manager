@@ -2,15 +2,27 @@
 <view class="container">
   <!-- 用户信息 -->
   <view class="profile-card">
-    <view class="avatar">{{userInfo.name ? userInfo.name[0] : '管'}}</view>
+    <view class="avatar">{{userInfo.name ? userInfo.name[0] : (isTenant ? '租' : '管')}}</view>
     <view class="info">
-      <text class="name">{{userInfo.name || userInfo.username || '管理员'}}</text>
-      <text class="phone">{{userInfo.phone || userInfo.role || ''}}</text>
+      <text class="name">{{userInfo.name || userInfo.username || (isTenant ? '租客' : '管理员')}}</text>
+      <text class="phone">{{userInfo.phone || (isTenant ? '租客' : '管理员')}}</text>
     </view>
   </view>
 
-  <!-- 角色信息 -->
-  <view class="menu-list">
+  <!-- 租客菜单 -->
+  <view wx:if="{{isTenant}}" class="menu-list">
+    <view class="menu-item" bindtap="goToRoleCheck">
+      <text>我的权限</text>
+      <text class="arrow">租客 ></text>
+    </view>
+    <view class="menu-item" bindtap="goToEdit">
+      <text>个人信息</text>
+      <text class="arrow">></text>
+    </view>
+  </view>
+
+  <!-- 管理员菜单 -->
+  <view wx:else class="menu-list">
     <view class="menu-item" bindtap="goToRoleCheck">
       <text>我的权限</text>
       <text class="arrow">{{userInfo.role || 'admin'}} ></text>
@@ -37,7 +49,7 @@
     </view>
   </view>
 
-  <view class="menu-list">
+  <view wx:if="{{!isTenant}}" class="menu-list">
     <view class="menu-item" bindtap="goToBackup">
       <text>数据备份</text>
       <text class="arrow">></text>
