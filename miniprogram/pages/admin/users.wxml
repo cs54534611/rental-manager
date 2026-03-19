@@ -1,0 +1,59 @@
+<view class="container">
+  <view class="header">
+    <text class="title">管理员管理</text>
+    <button class="btn-add" bindtap="showAddModal">+ 添加</button>
+  </view>
+
+  <view class="user-list">
+    <view class="user-item" wx:for="{{users}}" wx:key="id">
+      <view class="user-info">
+        <text class="username">{{item.username}}</text>
+        <text class="role">{{roles[item.role] || item.role}}</text>
+      </view>
+      <view class="user-detail">
+        <text>{{item.name || '未设置姓名'}}</text>
+        <text>{{item.phone || '未设置电话'}}</text>
+      </view>
+      <view class="user-actions">
+        <button size="mini" type="primary" bindtap="onEdit" data-user="{{item}}">编辑</button>
+        <button size="mini" type="warn" bindtap="onDelete" data-id="{{item.id}}" wx:if="{{item.username !== 'admin'}}">删除</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 添加/编辑弹窗 -->
+  <view class="modal" wx:if="{{showModal}}">
+    <view class="modal-mask" bindtap="closeModal"></view>
+    <view class="modal-content">
+      <view class="modal-title">{{editUser ? '编辑管理员' : '添加管理员'}}</view>
+      <form bindsubmit="onSubmit">
+        <view class="form-item" wx:if="{{!editUser}}">
+          <text>用户名</text>
+          <input name="username" placeholder="请输入用户名" />
+        </view>
+        <view class="form-item" wx:if="{{!editUser}}">
+          <text>密码</text>
+          <input name="password" password placeholder="请输入密码" />
+        </view>
+        <view class="form-item">
+          <text>角色</text>
+          <picker bindchange="onRoleChange" value="{{roleIndex}}" range="{{roleOptions}}">
+            <view class="picker">{{roleOptions[roleIndex]}}</view>
+          </picker>
+        </view>
+        <view class="form-item">
+          <text>姓名</text>
+          <input name="name" placeholder="请输入姓名" value="{{editUser.name}}" />
+        </view>
+        <view class="form-item">
+          <text>电话</text>
+          <input name="phone" type="number" placeholder="请输入电话" value="{{editUser.phone}}" />
+        </view>
+        <view class="modal-actions">
+          <button form-type="submit" type="primary">保存</button>
+          <button bindtap="closeModal">取消</button>
+        </view>
+      </form>
+    </view>
+  </view>
+</view>

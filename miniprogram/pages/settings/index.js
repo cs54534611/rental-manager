@@ -4,16 +4,29 @@ const app = getApp();
 Page({
   data: {
     owner: {},
-    userInfo: {}
+    userInfo: {},
+    isAdmin: false
   },
 
   onLoad() {
+    this.checkRole();
     this.loadOwner();
   },
 
   onShow() {
-    this.setData({ userInfo: app.globalData.userInfo || {} });
+    this.setData({ 
+      userInfo: app.globalData.userInfo || {},
+      role: app.globalData.role || wx.getStorageSync('role')
+    });
+    this.checkRole();
     this.loadOwner();
+  },
+
+  checkRole() {
+    const role = app.getRole();
+    this.setData({ 
+      isAdmin: role === 'super' || role === 'admin'
+    });
   },
 
   async loadOwner() {
@@ -41,6 +54,11 @@ Page({
 
   goToBackup() {
     wx.navigateTo({ url: '/pages/backup/index' });
+  },
+
+  // 管理员管理
+  goToAdminUsers() {
+    wx.navigateTo({ url: '/pages/admin/users' });
   },
 
   // 退出登录

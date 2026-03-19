@@ -2,6 +2,7 @@
   "pages": [
     "pages/login/index",
     "pages/index/index",
+    "pages/admin/users",
     "pages/houses/list",
     "pages/houses/detail",
     "pages/houses/add",

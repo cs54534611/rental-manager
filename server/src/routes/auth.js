@@ -41,9 +41,9 @@ router.post('/login', async (req, res) => {
     // 更新最后登录时间
     await db.query('UPDATE admin_users SET last_login = NOW() WHERE id = ?', [user.id]);
     
-    // 生成token
+    // 生成token（包含角色信息）
     const token = jwt.sign(
-      { id: user.id, username: user.username, role: user.role },
+      { id: user.id, username: user.username, role: user.role || 'admin' },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
