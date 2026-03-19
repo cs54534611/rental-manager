@@ -4,6 +4,7 @@ const app = getApp();
 Page({
   data: {
     loading: true,
+    isTenant: false,
     overview: {
       houses: { total: 0, rented: 0, vacant: 0, occupancyRate: 0 },
       income: { receivable: 0, actual: 0 },
@@ -17,6 +18,8 @@ Page({
     if (!app.globalData.token) {
       return wx.redirectTo({ url: '/pages/login/index' });
     }
+    // 检查角色
+    this.setData({ isTenant: app.globalData.role === 'tenant' });
     this.loadOverview();
   },
 
@@ -25,6 +28,8 @@ Page({
     if (!app.globalData.token) {
       return wx.redirectTo({ url: '/pages/login/index' });
     }
+    // 检查角色
+    this.setData({ isTenant: app.globalData.role === 'tenant' });
     this.loadOverview();
   },
 

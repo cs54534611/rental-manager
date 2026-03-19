@@ -7,17 +7,24 @@ Page({
     status: '',
     pendingAmount: 0,
     pendingCount: 0,
+    isTenant: false,
     statusMap: { 0: '未付', 1: '已付', 2: '逾期', 3: '减免' }
   },
 
   onLoad() {
+    this.setData({ isTenant: app.globalData.role === 'tenant' });
     this.loadRentals();
-    this.loadPendingStats();
+    if (!app.globalData.role !== 'tenant') {
+      this.loadPendingStats();
+    }
   },
 
   onShow() {
+    this.setData({ isTenant: app.globalData.role === 'tenant' });
     this.loadRentals();
-    this.loadPendingStats();
+    if (!app.globalData.role !== 'tenant') {
+      this.loadPendingStats();
+    }
   },
 
   async loadRentals() {

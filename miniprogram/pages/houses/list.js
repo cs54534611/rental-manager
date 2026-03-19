@@ -6,14 +6,17 @@ Page({
     houses: [],
     status: '',
     keyword: '',
+    isTenant: false,
     statusMap: { 0: '空置', 1: '已出租', 2: '待出租' }
   },
 
   onLoad() {
+    this.setData({ isTenant: app.globalData.role === 'tenant' });
     this.loadHouses();
   },
 
   onShow() {
+    this.setData({ isTenant: app.globalData.role === 'tenant' });
     this.loadHouses();
   },
 

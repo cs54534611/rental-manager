@@ -1,4 +1,3 @@
-// miniprogram/app.json
 {
   "pages": [
     "pages/login/index",

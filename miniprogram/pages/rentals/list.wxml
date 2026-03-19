@@ -1,15 +1,20 @@
 <!-- miniprogram/pages/rentals/list.wxml -->
 <view class="container">
-  <!-- 筛选 -->
-  <view class="filter-bar">
+  <!-- 筛选 - 仅管理员可见 -->
+  <view class="filter-bar" wx:if="{{!isTenant}}">
     <view class="filter-item {{status===''?'active':''}}" bindtap="onFilter" data-status="">全部</view>
     <view class="filter-item {{status===0?'active':''}}" bindtap="onFilter" data-status="0">未付</view>
     <view class="filter-item {{status===1?'active':''}}" bindtap="onFilter" data-status="1">已付</view>
     <view class="filter-item {{status===2?'active':''}}" bindtap="onFilter" data-status="2">逾期</view>
   </view>
 
-  <!-- 统计 -->
-  <view class="stats-card">
+  <!-- 租客提示 -->
+  <view wx:if="{{isTenant}}" class="tenant-tip">
+    <text>以下为您待缴的租金账单</text>
+  </view>
+
+  <!-- 统计 - 仅管理员可见 -->
+  <view class="stats-card" wx:if="{{!isTenant}}">
     <view class="stat">
       <text class="label">待收金额</text>
       <text class="value warning">¥{{pendingAmount}}</text>
@@ -36,7 +41,8 @@
           <text class="receivable">应收: ¥{{item.receivable}}</text>
           <text class="actual" wx:if="{{item.status===1}}">实收: ¥{{item.actual}}</text>
         </view>
-        <view class="actions">
+        <!-- 管理员操作按钮 -->
+        <view class="actions" wx:if="{{!isTenant}}">
           <view class="edit" wx:if="{{item.status===0}}" bindtap="onPay" data-id="{{item.id}}">记收</view>
           <view class="delete" bindtap="onDelete" data-id="{{item.id}}">删除</view>
         </view>
@@ -46,5 +52,6 @@
     <view wx:if="{{rentals.length===0}}" class="empty">暂无账单</view>
   </scroll-view>
 
-  <view class="add-btn" bindtap="goToAdd">➕ 记收租金</view>
+  <!-- 添加按钮 - 仅管理员可见 -->
+  <view class="add-btn" wx:if="{{!isTenant}}" bindtap="goToAdd">➕ 记收租金</view>
 </view>

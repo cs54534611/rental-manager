@@ -1,17 +1,22 @@
 <!-- miniprogram/pages/houses/list.wxml -->
 <view class="container">
-  <!-- 搜索栏 -->
-  <view class="search-bar">
+  <!-- 搜索栏 - 仅管理员可见 -->
+  <view class="search-bar" wx:if="{{!isTenant}}">
     <input placeholder="搜索小区/地址/房源编号" bindinput="onSearch" />
     <view class="search-btn">搜索</view>
   </view>
 
-  <!-- 筛选 -->
-  <view class="filter-bar">
+  <!-- 筛选 - 仅管理员可见 -->
+  <view class="filter-bar" wx:if="{{!isTenant}}">
     <view class="filter-item {{status===''?'active':''}}" bindtap="onFilter" data-status="">全部</view>
     <view class="filter-item {{status===0?'active':''}}" bindtap="onFilter" data-status="0">空置</view>
     <view class="filter-item {{status===1?'active':''}}" bindtap="onFilter" data-status="1">已出租</view>
     <view class="filter-item {{status===2?'active':''}}" bindtap="onFilter" data-status="2">待出租</view>
+  </view>
+
+  <!-- 租客提示 -->
+  <view wx:if="{{isTenant}}" class="tenant-tip">
+    <text>以下为您租赁的房源</text>
   </view>
 
   <!-- 房源列表 -->
@@ -40,6 +45,6 @@
     </view>
   </scroll-view>
 
-  <!-- 添加按钮 -->
-  <view class="add-btn" bindtap="goToAdd">➕ 添加房源</view>
+  <!-- 添加按钮 - 仅管理员可见 -->
+  <view class="add-btn" wx:if="{{!isTenant}}" bindtap="goToAdd">➕ 添加房源</view>
 </view>
