@@ -8,7 +8,7 @@
     <view class="user-item" wx:for="{{users}}" wx:key="id">
       <view class="user-info">
         <text class="username">{{item.username}}</text>
-        <text class="role">{{roles[item.role] || item.role}}</text>
+        <text class="role">{{roleMap[item.role] || item.role}}</text>
       </view>
       <view class="user-detail">
         <text>{{item.name || '未设置姓名'}}</text>

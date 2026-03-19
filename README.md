@@ -7,7 +7,9 @@
 | 账号 | 密码 | 角色 |
 |------|------|------|
 | admin | admin123 | 超级管理员 |
-| 13900001111 | admin123 | 租客（测试） |
+| 13900001111 | admin123 | 租客-李先生 |
+| 13900002222 | admin123 | 租客-张女士 |
+| 13800138000 | admin123 | 租客 |
 
 ## 📱 功能模块
 
@@ -145,18 +147,31 @@ rental-manager/
 ### 管理接口
 | 路由 | 方法 | 说明 |
 |------|------|------|
-| `/api/auth/login` | POST | 管理员登录 |
+| `/api/auth/login` | POST | 管理员/租客登录 |
 | `/api/auth/register` | POST | 注册管理员 |
-| `/api/auth/verify` | POST | 验证token |
+| `/api/auth/verify` | GET | 验证token |
 | `/api/auth/permissions` | GET | 获取权限 |
-| `/api/auth/users` | GET | 管理员列表 |
-| `/api/auth/users` | POST | 添加管理员 |
+| `/api/auth/users` | GET | 用户列表 |
+| `/api/auth/users` | POST | 添加用户 |
+| `/api/auth/users/:id` | PUT | 更新用户 |
+| `/api/auth/users/:id` | DELETE | 删除用户 |
 | `/api/auth/password` | PUT | 修改密码 |
+
+### 统计接口
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/stats/overview` | GET | 经营概览 |
+| `/api/stats/income` | GET | 收入趋势 |
+| `/api/stats/houses/distribution` | GET | 房源分布 |
+| `/api/stats/occupancy` | GET | 入住率统计 |
+| `/api/stats/revenue` | GET | 营收统计 |
+| `/api/stats/export/:type` | GET | 导出CSV |
+| `/api/stats/import/:type` | POST | 批量导入 |
 
 ### 健康检查
 | 路由 | 方法 | 说明 |
 |------|------|------|
-| `/api/health` | GET | 服务健康检查 |
+| `/api/` | GET | 服务健康检查 |
 
 ## 🔄 已实现功能详情
 

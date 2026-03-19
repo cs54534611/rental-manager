@@ -58,6 +58,13 @@ app.use('/api/tenants', auth, tenantsRouter);
 app.use('/api/contracts', auth, contractsRouter);
 app.use('/api/rentals', auth, rentalsRouter);
 app.use('/api/repairs', auth, repairsRouter);
+app.use('/api', (req, res, next) => {
+  if (req.path === '/health') {
+    return res.json({ code: 0, message: '租房管理系统 API 运行中', data: { version: '1.0.0', time: new Date().toISOString() } });
+  }
+  next();
+});
+
 app.use('/api/stats', auth, statsRouter);
 app.use('/api/settings', auth, settingsRouter);
 app.use('/api/staff', auth, staffRouter);

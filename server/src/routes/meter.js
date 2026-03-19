@@ -55,18 +55,18 @@ router.post('/', async (req, res) => {
     const electricLast = lastMonth.length > 0 ? lastMonth[0].electric_current : 0;
     
     // 计算用量和费用
-    const waterUsage = Math.max(0, waterCurrent - waterLast);
-    const electricUsage = Math.max(0, electricCurrent - electricLast);
-    const waterFee = waterUsage * (waterRate || 3.5);
-    const electricFee = electricUsage * (electricRate || 0.5);
+    const waterUsage = Math.max(0, water_current - waterLast);
+    const electricUsage = Math.max(0, electric_current - electricLast);
+    const waterFee = waterUsage * (water_rate || 3.5);
+    const electricFee = electricUsage * (electric_rate || 0.5);
     const totalFee = waterFee + electricFee;
     
     const [result] = await db.query(
       `INSERT INTO meter_readings (house_id, period, water_last, water_current, water_usage, water_rate, water_fee, 
        electric_last, electric_current, electric_usage, electric_rate, electric_fee, total_fee, remark, recorded_by) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [house_id, period, waterLast, waterCurrent, waterUsage, waterRate || 3.5, waterFee,
-       electricLast, electricCurrent, electricUsage, electricRate || 0.5, electricFee, totalFee, remark, recorded_by]
+      [house_id, period, waterLast, water_current, waterUsage, water_rate || 3.5, waterFee,
+       electricLast, electric_current, electricUsage, electric_rate || 0.5, electricFee, totalFee, remark, recorded_by]
     );
     
     res.json({ code: 0, message: '录入成功', data: { id: result.insertId, waterUsage, electricUsage, totalFee } });
@@ -124,6 +124,27 @@ router.get('/latest/:house_id', async (req, res) => {
     );
     
     res.json({ code: 0, data: rows[0] || null });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
+// 计算费用
+router.post('/calculate', async (req, res) => {
+  try {
+    const { house_id, type, reading } = req.body;
+    
+    const [lastMonth] = await db.query(
+      `SELECT ${type}_current as lastReading FROM meter_readings WHERE house_id = ? ORDER BY period DESC LIMIT 1`,
+      [house_id]
+    );
+    
+    const lastReading = lastMonth.length > 0 ? lastMonth[0].lastReading : 0;
+    const usage = Math.max(0, reading - lastReading);
+    const rate = type === 'water' ? 3.5 : 0.5;
+    const fee = usage * rate;
+    
+    res.json({ code: 0, data: { lastReading, reading, usage, rate, fee } });
   } catch (err) {
     res.status(500).json({ code: 1, message: err.message });
   }

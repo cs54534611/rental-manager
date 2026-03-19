@@ -178,6 +178,10 @@ router.get('/export/:type', async (req, res) => {
     let headers = [];
     let filename = '';
     
+    // 设置响应头为CSV下载
+    res.setHeader('Content-Type', 'text/csv;charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename=${encodeURIComponent(filename || type + '.csv')}`);
+    
     switch(type) {
       case 'houses':
         [data] = await db.query('SELECT house_no, community, address, layout, area, floor, rent, deposit, status FROM houses WHERE is_deleted = 0');
@@ -257,6 +261,11 @@ router.get('/export/:type', async (req, res) => {
     res.status(500).json({ code: 1, message: err.message });
   }
 });
+
+  // 健康检查
+  router.get('/', (req, res) => {
+    res.json({ code: 0, message: '租房管理系统 API 运行中', data: { version: '1.0.0', time: new Date().toISOString() } });
+  });
 
 module.exports = router;
 
@@ -424,6 +433,43 @@ router.post('/import/contracts', async (req, res) => {
       message: `导入完成：成功${imported}条，失败${failed}条`,
       data: { imported, failed, errors }
     });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
+// 入住率统计
+router.get('/occupancy', async (req, res) => {
+  try {
+    const [[total]] = await db.query('SELECT COUNT(*) as count FROM houses WHERE is_deleted = 0');
+    const [[occupied]] = await db.query('SELECT COUNT(*) as count FROM houses WHERE status = 1 AND is_deleted = 0');
+    const rate = total.count > 0 ? Math.round(occupied.count / total.count * 100) : 0;
+    res.json({ code: 0, data: { total: total.count, occupied: occupied.count, rate } });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
+// 营收统计
+router.get('/revenue', async (req, res) => {
+  try {
+    const { year, month } = req.query;
+    let query = '';
+    let params = [];
+    
+    if (year && month) {
+      query = 'SELECT SUM(amount) as total FROM transactions WHERE type = ? AND YEAR(created_at) = ? AND MONTH(created_at) = ?';
+      params = ['income', parseInt(year), parseInt(month)];
+    } else if (year) {
+      query = 'SELECT MONTH(created_at) as month, SUM(amount) as total FROM transactions WHERE type = ? AND YEAR(created_at) = ? GROUP BY MONTH(created_at)';
+      params = ['income', parseInt(year)];
+    } else {
+      query = 'SELECT YEAR(created_at) as year, SUM(amount) as total FROM transactions WHERE type = ? GROUP BY YEAR(created_at)';
+      params = ['income'];
+    }
+    
+    const [rows] = await db.query(query, params);
+    res.json({ code: 0, data: rows });
   } catch (err) {
     res.status(500).json({ code: 1, message: err.message });
   }

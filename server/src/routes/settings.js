@@ -29,6 +29,19 @@ router.get('/:key', async (req, res) => {
 });
 
 // 更新设置
+router.put('/', async (req, res) => {
+  try {
+    const settings = req.body;
+    for (const [key, value] of Object.entries(settings)) {
+      await db.query('UPDATE settings SET value = ? WHERE `key` = ?', [value, key]);
+    }
+    res.json({ code: 0, message: '更新成功' });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
+// 更新单个设置
 router.put('/:key', async (req, res) => {
   try {
     const { value } = req.body;
