@@ -3,12 +3,29 @@
   <view class="form">
     <view class="form-item">
       <text class="label">姓名</text>
-      <input class="input" placeholder="请输入姓名" model:value="{{name}}" />
+      <input class="input" value="{{name}}" bindinput="onNameInput" placeholder="请输入姓名"/>
     </view>
     <view class="form-item">
-      <text class="label">电话</text>
-      <input class="input" type="number" placeholder="请输入电话" model:value="{{phone}}" />
+      <text class="label">手机号</text>
+      <input class="input" value="{{phone}}" bindinput="onPhoneInput" placeholder="请输入手机号"/>
     </view>
-    <view class="submit-btn" bindtap="onSave">保存</view>
+    
+    <!-- 租客额外信息 -->
+    <block wx:if="{{isTenant}}">
+      <view class="form-item">
+        <text class="label">身份证号</text>
+        <input class="input" value="{{id_card}}" bindinput="onIdCardInput" placeholder="请输入身份证号"/>
+      </view>
+      <view class="form-item">
+        <text class="label">紧急联系人</text>
+        <input class="input" value="{{emergency_contact}}" bindinput="onEmergencyContactInput" placeholder="请输入紧急联系人"/>
+      </view>
+      <view class="form-item">
+        <text class="label">紧急联系电话</text>
+        <input class="input" value="{{emergency_phone}}" bindinput="onEmergencyPhoneInput" placeholder="请输入紧急联系电话"/>
+      </view>
+    </block>
+    
+    <button class="btn-save" bindtap="onSave">保存</button>
   </view>
 </view>

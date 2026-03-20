@@ -160,6 +160,45 @@ router.get('/verify', async (req, res) => {
   }
 });
 
+// 获取当前用户信息
+router.get('/me', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token) {
+      return res.status(401).json({ code: 1, message: '未登录' });
+    }
+    
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // 获取用户完整信息
+    const [rows] = await db.query(
+      'SELECT id, username, role, name, phone, avatar FROM admin_users WHERE id = ?',
+      [decoded.id]
+    );
+    
+    if (rows.length === 0) {
+      return res.status(404).json({ code: 1, message: '用户不存在' });
+    }
+    
+    const user = rows[0];
+    
+    // 如果是租客，获取租客详细信息
+    if (user.role === 'tenant') {
+      const [tenants] = await db.query(
+        'SELECT id, name, phone, id_card, emergency_contact, emergency_phone FROM tenants WHERE phone = ?',
+        [user.phone]
+      );
+      if (tenants.length > 0) {
+        user.tenantInfo = tenants[0];
+      }
+    }
+    
+    res.json({ code: 0, data: user });
+  } catch (err) {
+    res.status(500).json({ code: 1, message: err.message });
+  }
+});
+
 // 获取用户权限
 router.get('/permissions', async (req, res) => {
   try {

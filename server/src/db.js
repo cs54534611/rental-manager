@@ -1,5 +1,8 @@
 // server/src/db.js - 数据库连接配置
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 const mysql = require('mysql2/promise');
+
+console.log('[db.js] DB_PASSWORD:', process.env.DB_PASSWORD);
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',

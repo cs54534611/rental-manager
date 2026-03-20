@@ -5,6 +5,7 @@ Page({
   data: {
     contracts: [],
     status: '',
+    isTenant: false,
     paymentMethodMap: { 1: '押一付三', 2: '押一付一', 3: '半年付', 4: '年付' }
   },
 
@@ -12,6 +13,8 @@ Page({
     if (options.status) {
       this.setData({ status: options.status });
     }
+    const role = app.globalData.role || wx.getStorageSync('role');
+    this.setData({ isTenant: role === 'tenant' });
     this.loadContracts();
   },
 

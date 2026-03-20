@@ -52,7 +52,13 @@ Page({
   // 导航跳转
   navigateTo(e) {
     const url = e.currentTarget.dataset.url;
-    wx.navigateTo({ url });
+    // 检查是否是 tabBar 页面
+    const tabBarPages = ['/pages/index/index', '/pages/houses/list', '/pages/contracts/list', '/pages/rentals/list', '/pages/repairs/list', '/pages/finance/index', '/pages/meter/list', '/pages/settings/index'];
+    if (tabBarPages.some(p => url.startsWith(p))) {
+      wx.switchTab({ url });
+    } else {
+      wx.navigateTo({ url });
+    }
   },
 
   // 快捷功能
@@ -69,15 +75,15 @@ Page({
   },
   
   goToRepairs() {
-    wx.navigateTo({ url: '/pages/repairs/list?status=0' });
+    wx.switchTab({ url: '/pages/repairs/list' });
   },
 
   goToContracts() {
-    wx.navigateTo({ url: '/pages/contracts/list?status=1' });
+    wx.switchTab({ url: '/pages/contracts/list' });
   },
 
   goToRentals() {
-    wx.navigateTo({ url: '/pages/rentals/list' });
+    wx.switchTab({ url: '/pages/rentals/list' });
   },
   
   goToStats() {

@@ -50,14 +50,14 @@ Page({
       
       setTimeout(() => {
         if (role === 'tenant') {
-          // 租客跳转到房源列表
-          wx.switchTab({ url: '/pages/houses/list' });
+          // 租客跳转到房源列表（reLaunch刷新自定义tabBar）
+          wx.reLaunch({ url: '/pages/houses/list' });
         } else if (role === 'repair') {
           // 维修人员跳转到报修列表
-          wx.switchTab({ url: '/pages/repairs/list' });
+          wx.reLaunch({ url: '/pages/repairs/list' });
         } else {
           // 管理员/财务跳转到首页
-          wx.switchTab({ url: '/pages/index/index' });
+          wx.reLaunch({ url: '/pages/index/index' });
         }
       }, 1500);
       

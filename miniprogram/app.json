@@ -43,6 +43,7 @@
     "navigationBarTextStyle": "white"
   },
   "tabBar": {
+    "custom": true,
     "color": "#999999",
     "selectedColor": "#667eea",
     "backgroundColor": "#ffffff",
@@ -57,12 +58,24 @@
         "text": "房源"
       },
       {
+        "pagePath": "pages/contracts/list",
+        "text": "合同"
+      },
+      {
         "pagePath": "pages/rentals/list",
         "text": "租金"
       },
       {
+        "pagePath": "pages/repairs/list",
+        "text": "报修"
+      },
+      {
         "pagePath": "pages/finance/index",
         "text": "财务"
+      },
+      {
+        "pagePath": "pages/meter/list",
+        "text": "抄表"
       },
       {
         "pagePath": "pages/settings/index",

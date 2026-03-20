@@ -59,7 +59,7 @@ page { background: #f5f7fa; }
 
 .add-btn {
   position: fixed;
-  bottom: 40rpx;
+  bottom: 140rpx;
   left: 50%;
   transform: translateX(-50%);
   width: 300rpx;
@@ -71,4 +71,6 @@ page { background: #f5f7fa; }
   align-items: center;
   justify-content: center;
   font-size: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.4);
+  z-index: 100;
 }

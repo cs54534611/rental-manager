@@ -37,5 +37,6 @@
     <view wx:if="{{contracts.length===0}}" class="empty">暂无合同</view>
   </scroll-view>
 
-  <view class="add-btn" bindtap="goToAdd">➕ 新建合同</view>
+  <!-- 租客不显示新建按钮 -->
+  <view wx:if="{{!isTenant}}" class="add-btn" bindtap="goToAdd">➕ 新建合同</view>
 </view>
