@@ -13,20 +13,75 @@
 
 ## 📱 功能模块
 
+### 基础模块
 | 模块 | 功能 | 入口 |
 |------|------|------|
-| 房源管理 | 列表、详情、添加/编辑、照片上传、配套设施 | 首页 → 房源管理 |
+| 房源管理 | 列表、详情、添加/编辑、照片上传、配套设施 | TabBar → 房源 |
 | 租客管理 | 列表、详情、添加/编辑、删除 | 首页 → 租客管理 |
-| 合同管理 | 列表、详情、添加、续签、合同模板 | 首页 → 合同管理 |
-| 租金管理 | 列表、添加、记收、删除、逾期提醒 | 首页 → 租金管理 |
-| 报修管理 | 列表、详情、添加、删除 | 首页 → 报修管理 |
-| 维修人员 | 列表、添加/编辑、删除 | 首页 → 维修人员 |
+| 合同管理 | 列表、详情、添加、续签、合同模板 | TabBar → 合同 |
+| 租金管理 | 列表、添加、记收、删除、逾期提醒 | TabBar → 租金 |
+| 报修管理 | 列表、详情、添加、删除 | TabBar → 报修 |
+| 财务管理 | 收入统计、支付记录 | TabBar → 财务 |
+| 抄表记录 | 水电表录入、费用计算 | TabBar → 抄表 |
+| 退房检查 | 退房申请、预约、物品检查、押金结算 | 首页 → 退房检查 |
+| 维修人员 | 列表、添加/编辑、删除 | 设置 → 维修人员管理 |
 | 数据统计 | 概览、导出CSV、批量导入 | 首页 → 数据统计 |
-| 数据备份 | 手动/自动备份、还原 | 首页 → 数据备份 |
-| 系统设置 | 房东信息、租金提醒 | 首页 → 系统设置 |
-| 财务管理 | 收入统计、支付记录、收款 | 首页 → 财务 |
-| 抄表记录 | 水电表录入、费用计算、编辑、删除 | 首页 → 抄表 |
-| 退房检查 | 退房申请、预约、物品检查、押金结算 | 首页 → 退房 |
+| 数据备份 | 手动/自动备份、还原 | 设置 → 数据备份 |
+| 系统设置 | 房东信息、租金提醒 | TabBar → 我的 |
+
+### Phase 1: 智能催租提醒
+- 自动提醒规则（到期前7/3/1天、当天、逾期1/3/7天）
+- 发送提醒、统计待发/已发数量
+- 可查看每条提醒详情
+- **API**: `/api/reminders/*`
+
+### Phase 2: 房态日历
+- 单个房源月度日历视图（每天显示入住/空置状态）
+- 所有房源月度入住概览（入住率统计）
+- 切换上/下月导航
+- **API**: `/api/calendar/*`
+
+### Phase 3: 房源推广
+- 生成唯一推广链接（可分享）
+- 一键发布到58同城/贝壳/闲鱼/百姓网
+- 推广效果统计（浏览量、咨询量）
+- **API**: `/api/promotion/*`
+
+### Phase 4: 经营分析大屏
+- 月度总收入、待收金额
+- 房源总数、在租套数、入住率
+- 近6个月收入趋势图表
+- 房源类型分布统计
+- 风险预警（逾期租金提醒）
+- **API**: `/api/analytics/dashboard`
+
+### Phase 5: 保洁维修服务
+- 服务预约（保洁/维修/其他）
+- 维修人员派单管理
+- 服务状态跟踪（已预约→已派单→进行中→已完成）
+- 服务完成记录费用和评价
+- **API**: `/api/services/*`
+
+### Phase 6: 在线签约（电子合同）
+- 发起电子合同签署流程
+- 签署方（发起人/租客）分别签署
+- 签署状态跟踪（草稿→已签署）
+- 合同唯一标识码
+- **API**: `/api/econtracts/*`
+
+### Phase 7: 预付费钱包
+- 账户余额查询
+- 充值功能
+- 交易记录明细
+- 自动扣款开关（租金到期自动扣除）
+- **API**: `/api/wallet/*`
+
+### Phase 8: 投诉建议
+- 提交投诉/建议/表扬
+- 管理员查看所有反馈
+- 回复反馈
+- 状态跟踪（待处理→已回复→已关闭）
+- **API**: `/api/feedback/*`
 
 ## 🛠️ 技术栈
 
@@ -44,7 +99,6 @@ cd rental-manager
 
 ### 2. 初始化数据库
 ```bash
-# 执行 database 目录下的所有 SQL 文件
 mysql -u root -p < database/init.sql
 mysql -u root -p < database/notify.sql
 mysql -u root -p < database/storage.sql
@@ -54,6 +108,8 @@ mysql -u root -p < database/meter.sql
 mysql -u root -p < database/checkout.sql
 mysql -u root -p < database/transactions.sql
 mysql -u root -p < database/payments.sql
+mysql -u root -p < database/reminder.sql
+mysql -u root -p < database/promotion.sql
 ```
 
 ### 3. 启动后端
@@ -62,7 +118,7 @@ cd server
 npm install
 npm start
 ```
-服务运行在 http://localhost:3000
+服务运行在 http://localhost:3000（局域网: http://192.168.0.139:3000）
 
 ### 4. 配置小程序
 1. 用**微信开发者工具**打开 `miniprogram/` 目录
@@ -75,12 +131,12 @@ npm start
 rental-manager/
 ├── miniprogram/          # 微信小程序前端
 │   └── pages/
-│       ├── index/        # 首页（功能入口）
+│       ├── index/        # 首页
 │       ├── houses/       # 房源管理
 │       ├── tenants/       # 租客管理
 │       ├── contracts/    # 合同管理
 │       ├── rentals/      # 租金管理
-│       ├── payments/     # 支付/收款
+│       ├── payments/     # 支付记录
 │       ├── repairs/       # 报修管理
 │       ├── staff/        # 维修人员
 │       ├── stats/        # 数据统计
@@ -88,20 +144,25 @@ rental-manager/
 │       ├── meter/        # 抄表记录
 │       ├── checkout/     # 退房检查
 │       ├── backup/       # 数据备份
+│       ├── reminders/    # 催租提醒
+│       ├── wallet/       # 预付费钱包
+│       ├── feedback/     # 投诉建议
 │       └── settings/     # 系统设置
 ├── server/               # Node.js 后端
 │   └── src/
 │       ├── routes/      # API 路由
-│       ├── backup.js    # 备份模块
+│       ├── middleware/  # 中间件
 │       └── db.js        # 数据库连接
 └── database/            # MySQL 初始化脚本
 ```
 
-## 📦 API 接口
+## 📦 API 接口总览
 
-### 核心接口
+### 基础接口
 | 路由 | 方法 | 说明 |
 |------|------|------|
+| `/api/auth/login` | POST | 登录 |
+| `/api/auth/me` | GET | 当前用户信息 |
 | `/api/houses` | GET/POST | 房源列表/添加 |
 | `/api/houses/:id` | GET/PUT/DELETE | 房源详情/更新/删除 |
 | `/api/tenants` | GET/POST | 租客列表/添加 |
@@ -110,213 +171,169 @@ rental-manager/
 | `/api/contracts/:id` | GET/PUT/DELETE | 合同详情/更新/删除 |
 | `/api/contracts/renew/:id` | POST | 合同续签 |
 | `/api/rentals` | GET/POST | 租金列表/添加 |
-| `/api/rentals/:id` | GET/PUT/DELETE | 租金详情/更新/删除 |
 | `/api/rentals/generate` | POST | 批量生成账单 |
-| `/api/rentals/stats/pending` | GET | 待收租金统计 |
 | `/api/repairs` | GET/POST | 报修列表/添加 |
-| `/api/repairs/:id` | GET/PUT/DELETE | 报修详情/更新/删除 |
 | `/api/staff` | GET/POST | 维修人员列表/添加 |
 | `/api/staff/:id` | GET/PUT/DELETE | 维修人员详情/更新/删除 |
-| `/api/stats/overview` | GET | 经营概览 |
-| `/api/stats/export/:type` | GET | 导出CSV |
-| `/api/stats/import/:type` | POST | 批量导入 |
 | `/api/backup` | GET/POST | 备份列表/手动备份 |
+| `/api/backup/:filename` | DELETE/POST | 删除/还原备份 |
 
-### 扩展接口
+### Phase 1: 催租提醒
 | 路由 | 方法 | 说明 |
 |------|------|------|
-| `/api/payments/channels` | GET | 获取支付渠道 |
-| `/api/payments/create` | POST | 创建支付订单 |
-| `/api/payments/list` | GET | 支付记录列表 |
-| `/api/payments/stats` | GET | 支付统计 |
-| `/api/payments/notify` | POST | 支付回调 |
-| `/api/payments/refund` | POST | 退款 |
-| `/api/transactions` | GET/POST | 收支记录 |
-| `/api/meter` | GET/POST | 抄表记录 |
-| `/api/meter/:id` | GET/PUT/DELETE | 抄表详情/更新/删除 |
-| `/api/meter/calculate` | POST | 计算费用 |
+| `/api/reminders/rules` | GET | 获取提醒规则列表 |
+| `/api/reminders/pending` | GET | 获取待发送提醒 |
+| `/api/reminders/send` | POST | 发送提醒 |
+| `/api/reminders/send/:id` | POST | 发送单条提醒 |
+| `/api/reminders/stats` | GET | 获取提醒统计 |
+
+### Phase 2: 房态日历
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/calendar/overview` | GET | 月度房源概览（入住率） |
+| `/api/calendar/:houseId` | GET | 单个房源月度日历 |
+
+### Phase 3: 房源推广
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/promotion/share/:houseId` | GET | 生成推广链接 |
+| `/api/promotion/stats/:houseId` | GET | 推广统计 |
+| `/api/promotion/publish` | POST | 发布到平台 |
+| `/api/promotion/logs/:houseId` | GET | 发布记录 |
+| `/api/promotion/view/:shareCode` | POST | 记录浏览 |
+
+### Phase 4: 经营分析
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/analytics/dashboard` | GET | 大屏数据（收入/入住率/预警） |
+
+### Phase 5: 保洁维修
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/services` | GET/POST | 服务列表/预约 |
+| `/api/services/:id` | GET | 服务详情 |
+| `/api/services/:id/dispatch` | PUT | 派单 |
+| `/api/services/:id/complete` | PUT | 完成服务 |
+| `/api/services/:id/rate` | PUT | 评价服务 |
+| `/api/services/:id/cancel` | PUT | 取消服务 |
+
+### Phase 6: 电子合同
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/econtracts` | GET | 电子合同列表 |
+| `/api/econtracts/initiate` | POST | 发起签署 |
+| `/api/econtracts/:id/sign` | POST | 签署合同 |
+| `/api/econtracts/:id` | GET | 合同详情 |
+
+### Phase 7: 预付费钱包
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/wallet/balance/:tenantId` | GET | 余额查询 |
+| `/api/wallet/topup` | POST | 充值 |
+| `/api/wallet/history/:tenantId` | GET | 交易记录 |
+| `/api/wallet/auto-deduct/:tenantId` | PUT | 设置自动扣款 |
+
+### Phase 8: 投诉建议
+| 路由 | 方法 | 说明 |
+|------|------|------|
+| `/api/feedback` | GET | 反馈列表 |
+| `/api/feedback/submit` | POST | 提交反馈 |
+| `/api/feedback/:id/reply` | PUT | 回复反馈 |
+| `/api/feedback/:id/status` | PUT | 更新状态 |
+
+### 其他接口
+| 路由 | 方法 | 说明 |
+|------|------|------|
 | `/api/checkout` | GET/POST | 退房列表/申请 |
-| `/api/checkout/:id` | GET/PUT/DELETE | 退房详情/更新/删除 |
-| `/api/checkout/:id/book` | PUT | 预约退房时间 |
-| `/api/checkout/:id/complete` | PUT | 完成退房检查 |
-| `/api/notify/templates` | GET | 通知模板 |
-| `/api/notify/send` | POST | 发送通知 |
-| `/api/contract-templates` | GET/POST | 合同模板 |
-| `/api/storage/config` | GET/PUT | 存储配置 |
-
-### 管理接口
-| 路由 | 方法 | 说明 |
-|------|------|------|
-| `/api/auth/login` | POST | 管理员/租客登录 |
-| `/api/auth/register` | POST | 注册管理员 |
-| `/api/auth/verify` | GET | 验证token |
-| `/api/auth/permissions` | GET | 获取权限 |
-| `/api/auth/users` | GET | 用户列表 |
-| `/api/auth/users` | POST | 添加用户 |
-| `/api/auth/users/:id` | PUT | 更新用户 |
-| `/api/auth/users/:id` | DELETE | 删除用户 |
-| `/api/auth/password` | PUT | 修改密码 |
-
-### 统计接口
-| 路由 | 方法 | 说明 |
-|------|------|------|
+| `/api/meter` | GET/POST | 抄表记录 |
+| `/api/finance/summary` | GET | 财务汇总 |
 | `/api/stats/overview` | GET | 经营概览 |
-| `/api/stats/income` | GET | 收入趋势 |
-| `/api/stats/houses/distribution` | GET | 房源分布 |
-| `/api/stats/occupancy` | GET | 入住率统计 |
-| `/api/stats/revenue` | GET | 营收统计 |
 | `/api/stats/export/:type` | GET | 导出CSV |
-| `/api/stats/import/:type` | POST | 批量导入 |
-
-### 健康检查
-| 路由 | 方法 | 说明 |
-|------|------|------|
-| `/api/` | GET | 服务健康检查 |
-
-## 🔄 已实现功能详情
-
-## 📋 更新日志
-
-### 2026-03-20 更新
-
-#### 小程序优化
-- ✅ **自定义 TabBar** - 根据用户角色显示不同菜单
-  - 租客：房源、合同、租金、报修、我的
-  - 维修人员：报修、抄表、我的
-  - 财务：房源、租金、财务、我的
-  - 管理员：首页、房源、租金、财务、我的
-
-- ✅ **租客权限优化**
-  - 租客合同列表不显示"新建合同"按钮
-  - 报修提交按钮位置优化（避开底部 TabBar）
-  - 个人信息页面正确显示租客信息
-
-- ✅ **首页快捷功能修复**
-  - 修复部分快捷功能点击无反应问题
-  - 区分 tabBar 页面和普通页面的跳转方式
-
-#### 后端 API
-- ✅ **新增 `/api/auth/me` 接口** - 获取当前登录用户完整信息
-  - 返回用户基本信息 + 租客详细信息（含身份证、紧急联系人等）
-
-- ✅ **维修人员账号支持** - 维修人员可登录小程序
-
-- ✅ **数据修复**
-  - 修复租客用户信息（姓名、管理员账号绑定）
-  - 清理重复的租客记录
-  - 为测试租客创建合同和租金数据
-
-#### 安全测试
-- ✅ **完整安全测试脚本** (`server/test-security-full.js`)
-  - 认证测试（有效/无效 token）
-  - SQL 注入防护测试
-  - XSS 防护测试
-  - 暴力破解防护测试
-  - 角色权限测试
-
-- ✅ **全页面功能测试** (`server/test-all-pages.js`)
-  - 测试所有页面 API 接口
-  - 测试不同角色的访问权限
+| `/api/health` | GET | 健康检查 |
 
 ## 🛡️ 安全特性
 
-### 1. 登录认证 ✅
 - JWT token 认证
-- 密码 bcrypt 加密存储
-- 登录/登出功能
-- token 过期自动跳转登录
-- 支持管理员/租客两种登录方式
+- 密码 bcrypt 加密
 - 登录限流（每分钟10次）
-
-### 2. 安全防护 ✅
-- 全局 API 认证中间件
-- CORS 跨域限制
-- 文件上传类型限制
+- 全局请求限流（每分钟100次）
 - SQL 参数化查询（防注入）
+- CORS 跨域限制
 - .env 敏感信息保护
-- 请求限流（每分钟100次）
 - 请求日志记录
 
-### 3. 微信通知推送 ✅
-- 租金到期提醒
-- 合同到期提醒
-- 报修状态通知
-- 可配置通知模板
+## 👥 角色权限
 
-### 2. 云存储（OSS/COS）✅
-- 阿里云OSS支持
-- 腾讯云COS支持
-- 本地存储（默认）
-
-### 3. 多管理员权限 ✅
-- 角色：super/admin/finance/repair
-- 细粒度权限控制
-
-### 4. 收款功能 ✅
-- 微信支付
-- 支付宝
-- 支付记录查询
-- 退款功能
-- 收入统计
-
-### 5. 财务报表 ✅
-- 收支记录
-- 收入统计
-- 支付方式分析
-- 趋势图表
-
-### 6. 合同模板 ✅
-- 自定义合同模板
-- 变量替换
-- 一键生成
-- 新建合同自动生成租金账单
-
-### 7. 抄表记录 ✅
-- 水表记录
-- 电表记录
-- 自动计算费用
-- 编辑/删除功能
-
-### 8. 退房检查 ✅
-- 退房申请（需先结清租金）
-- 预约退房时间
-- 物品检查清单
-- 押金结算（扣款/退款）
-- 合同状态自动变更
-
-### 9. 租客权限 ✅
-- 租客可登录小程序
-- 只能查看自己的房源、合同、租金
-- 可提交报修
-- 根据手机号关联租客账号
-
-## 👥 角色权限说明
-
-| 角色 | 说明 | 可访问模块 |
-|------|------|-----------|
-| super | 超级管理员 | 全部功能 |
-| admin | 管理员 | 全部功能（除用户管理） |
-| finance | 财务人员 | 房源、租客、合同、租金、财务、统计 |
-| repair | 维修人员 | 报修管理、抄表记录 |
-| tenant | 租客 | 自己的房源、合同、租金、报修 |
-
-### 租客登录
-- 登录类型选择"租客"
-- 输入手机号（需提前绑定）
-- 密码与管理端一致
+| 角色 | 可访问模块 |
+|------|-----------|
+| super | 全部功能 |
+| admin | 全部功能（除用户管理） |
+| finance | 房源、租客、合同、租金、财务、统计 |
+| repair | 报修管理、抄表记录 |
+| tenant | 自己的房源、合同、钱包、投诉建议 |
 
 ## 🧪 测试
 
-### 运行 API 测试
 ```bash
 cd server
-node test/api-test.js
+node test-full-matching.js   # 全部功能测试
+node test-phase1-8.js          # Phase 1-8 功能测试
 ```
 
-### 测试安全修复
-```bash
-cd server
-node test-security.js
-```
+## 📋 更新日志
+
+### 2026-03-20 Phase 1-8 功能更新
+
+#### Phase 1: 智能催租提醒 ✅
+- 6条提醒规则（到期前7/3/1天、当天、逾期1/3/7天）
+- 发送提醒、统计待发/已发数量
+- 数据库表：`reminder_rules`、`reminders`
+
+#### Phase 2: 房态日历 ✅
+- 单个房源月度日历视图
+- 所有房源月度入住概览
+- 数据库表：继承 houses 表
+
+#### Phase 3: 房源推广 ✅
+- 生成唯一推广链接
+- 一键发布到58同城/贝壳/闲鱼/百姓网
+- 推广统计（浏览/咨询量）
+- 数据库表：`share_links`、`listing_publish_logs`
+
+#### Phase 4: 经营分析大屏 ✅
+- 月度收入/待收/入住率
+- 近6个月收入趋势
+- 房源类型分布
+- 风险预警（逾期租金）
+- 数据库表：继承 rentals/houses 表
+
+#### Phase 5: 保洁维修服务 ✅
+- 服务预约（保洁/维修/其他）
+- 派单管理、服务状态跟踪
+- 费用记录、评价
+- 数据库表：`services`
+
+#### Phase 6: 在线签约 ✅
+- 发起电子合同签署
+- 双方签署状态跟踪
+- 数据库表：`econtracts`
+
+#### Phase 7: 预付费钱包 ✅
+- 余额查询、充值
+- 交易记录明细
+- 自动扣款开关
+- 数据库表：`prepaid_accounts`、`prepaid_transactions`
+
+#### Phase 8: 投诉建议 ✅
+- 投诉/建议/表扬类型
+- 管理员回复
+- 状态跟踪
+- 数据库表：`feedback`
+
+#### 小程序页面更新 ✅
+- 新增页面：`wallet/`（钱包）、`feedback/`（投诉建议）
+- "我的"页面新增钱包、投诉建议入口
+- 钱包页面：余额展示、充值、交易记录
+- 投诉建议页面：列表、提交、回复
 
 MIT

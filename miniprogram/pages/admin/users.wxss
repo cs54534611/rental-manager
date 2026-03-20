@@ -1,8 +1,15 @@
 /* pages/admin/users.wxss */
-page { background: #f5f7fa; }
-.container { padding: 20rpx; }
+page {
+ background: #f5f7fa; 
+}
+.container {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+ padding: 20rpx;
+}
 
 .header {
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,35 +17,51 @@ page { background: #f5f7fa; }
   padding: 30rpx;
   border-radius: 16rpx;
   margin-bottom: 20rpx;
+
 }
 
-.title { color: white; font-size: 32rpx; font-weight: bold; }
+.title {
+ color: white; font-size: 32rpx; font-weight: bold; 
+}
 
 .btn-add {
+
   background: white;
   color: #667eea;
   font-size: 26rpx;
   padding: 10rpx 30rpx;
   border-radius: 30rpx;
+
 }
 
-.user-list { background: white; border-radius: 16rpx; overflow: hidden; }
+.user-list {
+ background: white; border-radius: 16rpx; overflow: hidden; 
+}
 
 .user-item {
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 30rpx;
   border-bottom: 1rpx solid #f0f0f0;
+
 }
 
-.user-item:last-child { border-bottom: none; }
+.user-item:last-child {
+ border-bottom: none; 
+}
 
-.user-info { display: flex; flex-direction: column; }
+.user-info {
+ display: flex; flex-direction: column; 
+}
 
-.username { font-size: 30rpx; font-weight: bold; color: #333; }
+.username {
+ font-size: 30rpx; font-weight: bold; color: #333; 
+}
 
-.role { 
+.role {
+ 
   font-size: 24rpx; 
   color: #667eea; 
   background: #e8f4ff; 
@@ -46,75 +69,100 @@ page { background: #f5f7fa; }
   border-radius: 20rpx;
   margin-top: 8rpx;
   display: inline-block;
+
 }
 
-.user-detail { 
+.user-detail {
+ 
   display: flex; 
   flex-direction: column; 
   font-size: 26rpx; 
   color: #666;
+
 }
 
-.user-actions { display: flex; gap: 10rpx; }
+.user-actions {
+ display: flex; gap: 10rpx; 
+}
 
 .modal {
+
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: 1000;
+
 }
 
 .modal-mask {
+
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.5);
+
 }
 
 .modal-content {
+
   position: absolute;
   bottom: 0;
   left: 0; right: 0;
   background: white;
   border-radius: 30rpx 30rpx 0 0;
   padding: 40rpx;
+
 }
 
-.modal-title { 
+.modal-title {
+ 
   font-size: 34rpx; 
   font-weight: bold; 
   text-align: center;
   margin-bottom: 40rpx;
+
 }
 
 .form-item {
+
   display: flex;
   align-items: center;
   padding: 20rpx 0;
   border-bottom: 1rpx solid #f0f0f0;
+
 }
 
-.form-item text { 
+.form-item text {
+ 
   width: 140rpx; 
   font-size: 28rpx; 
   color: #333;
+
 }
 
 .form-item input {
+
   flex: 1;
   font-size: 28rpx;
+
 }
 
 .picker {
+
   flex: 1;
   font-size: 28rpx;
   color: #333;
+
 }
 
 .modal-actions {
+
   display: flex;
   gap: 20rpx;
   margin-top: 40rpx;
+
 }
 
 .modal-actions button {
+
   flex: 1;
+
 }

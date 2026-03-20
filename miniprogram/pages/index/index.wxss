@@ -1,9 +1,12 @@
 /* miniprogram/pages/index/index.wxss */
 page {
+
   background: #f5f7fa;
+
 }
 
 .tenant-tip {
+
   background: #e8f4ff;
   color: #1677ff;
   padding: 20rpx;
@@ -11,160 +14,217 @@ page {
   margin-bottom: 20rpx;
   text-align: center;
   font-size: 28rpx;
+
 }
 
 .container {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+
   padding: 0 30rpx 30rpx;
 }
 
 .header {
+
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 40rpx 30rpx;
   border-radius: 0 0 30rpx 30rpx;
   margin: 0 -30rpx 30rpx;
   color: white;
+
 }
 
 .header-title {
+
   font-size: 40rpx;
   font-weight: bold;
   margin-bottom: 10rpx;
+
 }
 
 .header-subtitle {
+
   font-size: 26rpx;
   opacity: 0.9;
+
 }
 
 .loading {
+
   text-align: center;
   padding: 100rpx;
   color: #999;
+
 }
 
 .section {
+
   background: white;
   border-radius: 20rpx;
   padding: 30rpx;
   margin-bottom: 30rpx;
+
 }
 
 .section-title {
+
   font-size: 28rpx;
   font-weight: 600;
   color: #333;
   margin-bottom: 20rpx;
+
 }
 
 /* 统计卡片 */
 .stats-grid {
+
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20rpx;
   margin-bottom: 20rpx;
+
 }
 
 .stat-card {
+
   text-align: center;
   padding: 20rpx 10rpx;
   background: #f8f9fa;
   border-radius: 12rpx;
+
 }
 
 .stat-value {
+
   font-size: 36rpx;
   font-weight: bold;
   color: #333;
+
 }
 
-.stat-value.primary { color: #667eea; }
-.stat-value.warning { color: #f59e0b; }
-.stat-value.success { color: #10b981; }
+.stat-value.primary {
+ color: #667eea; 
+}
+.stat-value.warning {
+ color: #f59e0b; 
+}
+.stat-value.success {
+ color: #10b981; 
+}
 
 .stat-label {
+
   font-size: 22rpx;
   color: #666;
   margin-top: 8rpx;
+
 }
 
 /* 收入卡片 */
 .income-card {
+
   display: flex;
   justify-content: space-between;
   background: #f8f9fa;
   border-radius: 12rpx;
   padding: 20rpx 30rpx;
+
 }
 
 .income-item {
+
   display: flex;
   flex-direction: column;
+
 }
 
 .income-label {
+
   font-size: 24rpx;
   color: #666;
   margin-bottom: 8rpx;
+
 }
 
 .income-value {
+
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
+
 }
 
-.income-value.primary { color: #10b981; }
+.income-value.primary {
+ color: #10b981; 
+}
 
 /* 待办列表 */
 .todo-list {
+
   display: flex;
   flex-direction: column;
+
 }
 
 .todo-item {
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20rpx 0;
   border-bottom: 1rpx solid #f0f0f0;
+
 }
 
 .todo-item:last-child {
+
   border-bottom: none;
+
 }
 
 .todo-label {
+
   font-size: 28rpx;
   color: #333;
+
 }
 
 .todo-badge {
+
   background: #667eea;
   color: white;
   padding: 4rpx 16rpx;
   border-radius: 20rpx;
   font-size: 24rpx;
+
 }
 
 .todo-badge.warning {
+
   background: #f59e0b;
+
 }
 
 /* 快捷功能 */
 .quick-grid {
+
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20rpx;
+
 }
 
 .quick-item {
+
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20rpx 10rpx;
+
 }
 
 .quick-icon {
+
   width: 80rpx;
   height: 80rpx;
   background: #f0f0f0;
@@ -174,60 +234,81 @@ page {
   justify-content: center;
   font-size: 40rpx;
   margin-bottom: 10rpx;
+
 }
 
 .quick-item text {
+
   font-size: 22rpx;
   color: #666;
+
 }
 
 /* 合同列表 */
 .contract-list {
+
   display: flex;
   flex-direction: column;
+
 }
 
 .contract-item {
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20rpx 0;
   border-bottom: 1rpx solid #f0f0f0;
+
 }
 
 .contract-item:last-child {
+
   border-bottom: none;
+
 }
 
 .contract-info {
+
   display: flex;
   flex-direction: column;
+
 }
 
 .contract-address {
+
   font-size: 28rpx;
   color: #333;
+
 }
 
 .contract-tenant {
+
   font-size: 24rpx;
   color: #666;
   margin-top: 6rpx;
+
 }
 
 .contract-date {
+
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+
 }
 
 .contract-date .date {
+
   font-size: 26rpx;
   color: #333;
+
 }
 
 .contract-date .days {
+
   font-size: 22rpx;
   color: #f59e0b;
   margin-top: 4rpx;
+
 }

@@ -1,169 +1,239 @@
 /* miniprogram/pages/stats/index.wxss */
-page { background: #f5f7fa; }
-.container { padding: 20rpx; }
+page {
+ background: #f5f7fa; 
+}
+.container {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+ padding: 20rpx;
+}
 
 .overview-card {
+
   display: flex;
   background: white;
   border-radius: 16rpx;
   padding: 30rpx;
   margin-bottom: 20rpx;
+
 }
 
 .overview-item {
+
   flex: 1;
   text-align: center;
+
 }
 
 .overview-item .value {
+
   display: block;
   font-size: 40rpx;
   font-weight: bold;
   color: #333;
   margin-bottom: 10rpx;
+
 }
 
-.overview-item .value.primary { color: #667eea; }
-.overview-item .value.warning { color: #f59e0b; }
-.overview-item .value.success { color: #10b981; }
+.overview-item .value.primary {
+ color: #667eea; 
+}
+.overview-item .value.warning {
+ color: #f59e0b; 
+}
+.overview-item .value.success {
+ color: #10b981; 
+}
 
 .overview-item .label {
+
   font-size: 24rpx;
   color: #999;
+
 }
 
 .section {
+
   background: white;
   border-radius: 16rpx;
   padding: 30rpx;
   margin-bottom: 20rpx;
+
 }
 
 .section-title {
+
   font-size: 28rpx;
   font-weight: 600;
   color: #333;
   margin-bottom: 20rpx;
+
 }
 
 .income-chart {
+
   display: flex;
   flex-direction: column;
   gap: 20rpx;
+
 }
 
 .income-bar {
+
   display: flex;
   align-items: center;
   gap: 20rpx;
+
 }
 
 .bar-label {
+
   width: 80rpx;
   font-size: 24rpx;
   color: #666;
+
 }
 
 .bar-value {
+
   flex: 1;
+
 }
 
 .bar {
+
   height: 50rpx;
   border-radius: 8rpx;
   display: flex;
   align-items: center;
   padding-left: 20rpx;
   min-width: 100rpx;
+
 }
 
 .bar text {
+
   font-size: 24rpx;
   color: #333;
   font-weight: 600;
+
 }
 
-.bar.primary { background: #667eea; }
-.bar.primary text { color: white; }
+.bar.primary {
+ background: #667eea; 
+}
+.bar.primary text {
+ color: white; 
+}
 
 .distribution {
+
   display: flex;
   flex-direction: column;
   gap: 20rpx;
+
 }
 
 .dist-item {
+
   display: flex;
   align-items: center;
   gap: 20rpx;
+
 }
 
 .dist-color {
+
   width: 24rpx;
   height: 24rpx;
   border-radius: 6rpx;
+
 }
 
 .dist-name {
+
   flex: 1;
   font-size: 26rpx;
   color: #333;
+
 }
 
 .dist-value {
+
   font-size: 26rpx;
   color: #666;
+
 }
 
 .repair-stats {
+
   display: flex;
+
 }
 
 .repair-item {
+
   flex: 1;
   text-align: center;
+
 }
 
 .repair-item .value {
+
   display: block;
   font-size: 36rpx;
   font-weight: bold;
   color: #333;
   margin-bottom: 10rpx;
+
 }
 
-.repair-item .value.success { color: #10b981; }
+.repair-item .value.success {
+ color: #10b981; 
+}
 
 .repair-item .label {
+
   font-size: 24rpx;
   color: #999;
+
 }
 
 /* 数据导出 */
 .export-grid {
+
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20rpx;
+
 }
 
 .export-item {
+
   background: #f9f9f9;
   border-radius: 12rpx;
   padding: 24rpx;
   text-align: center;
+
 }
 
 .export-item.primary {
+
   background: #e8f5e9;
+
 }
 
 .export-icon {
+
   font-size: 40rpx;
   display: block;
   margin-bottom: 10rpx;
+
 }
 
 .export-name {
+
   font-size: 24rpx;
   color: #333;
+
 }

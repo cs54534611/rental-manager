@@ -1,21 +1,32 @@
 /* miniprogram/pages/staff/list.wxss */
-page { background: #f5f7fa; }
+page {
+ background: #f5f7fa; 
+}
 
 .search-bar {
+
   background: white;
   padding: 20rpx;
+
 }
 
 .search-input {
+
   background: #f5f5f5;
   border-radius: 30rpx;
   padding: 16rpx 30rpx;
   font-size: 28rpx;
+
 }
 
-.list { padding: 20rpx; }
+.list {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+ padding: 20rpx;
+}
 
 .item {
+
   background: white;
   border-radius: 16rpx;
   padding: 24rpx;
@@ -23,23 +34,29 @@ page { background: #f5f7fa; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+
 }
 
 .item-content {
+
   flex: 1;
   display: flex;
   align-items: center;
+
 }
 
 .delete-btn {
+
   font-size: 24rpx;
   color: #fff;
   background: #ef4444;
   padding: 8rpx 20rpx;
   border-radius: 8rpx;
+
 }
 
 .avatar {
+
   width: 80rpx;
   height: 80rpx;
   background: #667eea;
@@ -50,28 +67,42 @@ page { background: #f5f7fa; }
   align-items: center;
   justify-content: center;
   margin-right: 20rpx;
+
 }
 
-.info { flex: 1; }
-.name { font-size: 30rpx; font-weight: 600; color: #333; }
-.desc { font-size: 26rpx; color: #999; margin-top: 8rpx; }
+.info {
+ flex: 1; 
+}
+.name {
+ font-size: 30rpx; font-weight: 600; color: #333; 
+}
+.desc {
+ font-size: 26rpx; color: #999; margin-top: 8rpx; 
+}
 
 .status {
+
   font-size: 24rpx;
   padding: 6rpx 16rpx;
   border-radius: 6rpx;
   background: #f5f5f5;
   color: #999;
+
 }
-.status.active { background: #d1fae5; color: #059669; }
+.status.active {
+ background: #d1fae5; color: #059669; 
+}
 
 .empty {
+
   text-align: center;
   padding: 100rpx;
   color: #999;
+
 }
 
 .add-btn {
+
   position: fixed;
   right: 40rpx;
   bottom: 40rpx;
@@ -85,4 +116,5 @@ page { background: #f5f7fa; }
   align-items: center;
   justify-content: center;
   box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.4);
+
 }

@@ -1,0 +1,49 @@
+<view class="container">
+  <!-- 余额卡片 -->
+  <view class="balance-card">
+    <view class="balance-label">账户余额</view>
+    <view class="balance-amount">¥{{balance}}</view>
+    <view class="balance-hint">预付费钱包，安全透明</view>
+  </view>
+
+  <!-- 功能按钮 -->
+  <view class="action-row">
+    <view class="action-btn primary" bindtap="showTopupModal">
+      <text class="icon">💰</text>
+      <text>充值</text>
+    </view>
+    <view class="action-btn {{autoDeduct ? 'active' : ''}}" bindtap="onToggleAutoDeduct">
+      <text class="icon">⚡</text>
+      <text>{{autoDeduct ? '已开启自动扣' : '自动扣款'}}</text>
+    </view>
+  </view>
+
+  <!-- 交易记录 -->
+  <view class="section-title">交易记录</view>
+  <view class="history-list">
+    <block wx:for="{{history}}" wx:key="id">
+      <view class="history-item">
+        <view class="history-left">
+          <view class="history-type {{getTypeClass(item.type)}}">{{getTypeName(item.type)}}</view>
+          <view class="history-date">{{item.created_at}}</view>
+        </view>
+        <view class="history-right {{item.type === 'topup' ? 'income' : 'expense'}}">
+          {{item.type === 'topup' ? '+' : '-' }}¥{{item.amount}}
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{history.length === 0}}" class="empty">暂无交易记录</view>
+  </view>
+
+  <!-- 充值弹窗 -->
+  <view class="modal-mask" wx:if="{{showTopup}}" bindtap="hideTopupModal">
+    <view class="modal-content" catchtap="">
+      <view class="modal-title">充值金额</view>
+      <input class="modal-input" type="digit" placeholder="请输入金额" value="{{topupAmount}}" bindinput="onTopupAmountInput" />
+      <view class="modal-btns">
+        <button class="btn-cancel" bindtap="hideTopupModal">取消</button>
+        <button class="btn-confirm" bindtap="onTopup">确认充值</button>
+      </view>
+    </view>
+  </view>
+</view>

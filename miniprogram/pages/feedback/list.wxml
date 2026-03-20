@@ -1,0 +1,27 @@
+<view class="container">
+  <view class="list">
+    <block wx:for="{{list}}" wx:key="id">
+      <view class="card">
+        <view class="card-header">
+          <view class="type-tag {{item.type}}">{{item.type === 'complaint' ? '投诉' : item.type === 'suggestion' ? '建议' : '表扬'}}</view>
+          <view class="status-tag" style="background: {{getStatusInfo(item.status).color}}20; color: {{getStatusInfo(item.status).color}}">
+            {{getStatusInfo(item.status).text}}
+          </view>
+        </view>
+        <view class="card-body">{{item.content}}</view>
+        <view class="card-meta">
+          <text>{{item.tenant_name || '匿名'}}</text>
+          <text>{{item.created_at}}</text>
+        </view>
+        <view wx:if="{{item.reply}}" class="card-reply">
+          <text class="reply-label">回复：</text>{{item.reply}}
+        </view>
+        <view wx:if="{{isAdmin && item.status !== 'replied'}}" class="card-actions">
+          <button class="btn-reply" bindtap="onReply" data-id="{{item.id}}">回复</button>
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{list.length === 0}}" class="empty">暂无反馈</view>
+  </view>
+  <view wx:if="{{isTenant}}" class="add-btn" bindtap="goToAdd">+ 提交反馈</view>
+</view>

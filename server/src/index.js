@@ -25,6 +25,15 @@ const contractTemplateRouter = require('./routes/contractTemplate');
 const meterRouter = require('./routes/meter');
 const checkoutRouter = require('./routes/checkout');
 const paymentsRouter = require('./routes/payments');
+const remindersRouter = require('./routes/reminders');
+const calendarRouter = require('./routes/calendar');
+const promotionRouter = require('./routes/promotion');
+const analyticsRouter = require('./routes/analytics');
+const servicesRouter = require('./routes/services');
+const econtractsRouter = require('./routes/econtracts');
+const walletRouter = require('./routes/wallet');
+const feedbackRouter = require('./routes/feedback');
+const financeRouter = require('./routes/finance');
 const { scheduleBackup } = require('./backup');
 
 const app = express();
@@ -76,6 +85,15 @@ app.use('/api/contract-templates', auth, contractTemplateRouter);
 app.use('/api/meter', auth, meterRouter);
 app.use('/api/checkout', auth, checkoutRouter);
 app.use('/api/payments', auth, paymentsRouter);
+app.use('/api/reminders', auth, remindersRouter);
+app.use('/api/calendar', auth, calendarRouter);
+app.use('/api/promotion', auth, promotionRouter);
+app.use('/api/analytics', auth, analyticsRouter);
+app.use('/api/services', auth, servicesRouter);
+app.use('/api/econtracts', auth, econtractsRouter);
+app.use('/api/wallet', auth, walletRouter);
+app.use('/api/feedback', auth, feedbackRouter);
+app.use('/api/finance', auth, financeRouter);
 
 // 公开接口 - 无需登录
 app.use('/api/auth', authRouter);
@@ -126,6 +144,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ code: 500, message: '服务器错误', error: err.message });
 });
 
-app.listen(PORT, () => {
-  console.log(`租房管理系统 API 服务运行在 http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`租房管理系统 API 服务运行在 http://0.0.0.0:${PORT} (局域网: http://192.168.0.139:${PORT})`);
 });

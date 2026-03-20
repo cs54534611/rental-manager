@@ -32,6 +32,10 @@
     "pages/checkout/detail",
     "pages/checkout/add",
     "pages/backup/index",
+    "pages/reminders/list",
+    "pages/wallet/index",
+    "pages/feedback/list",
+    "pages/feedback/add",
     "pages/settings/index",
     "pages/settings/owner",
     "pages/settings/remind"

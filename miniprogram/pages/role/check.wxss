@@ -1,52 +1,76 @@
 /* pages/role/check.wxss */
-page { background: #f5f7fa; }
-.container { padding: 20rpx; }
+page {
+ background: #f5f7fa; 
+}
+.container {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+ padding: 20rpx;
+}
 
 .header {
+
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 30rpx 20rpx;
   border-radius: 16rpx;
   text-align: center;
   margin-bottom: 20rpx;
+
 }
 
 .role-label {
+
   display: block;
   color: rgba(255,255,255,0.8);
   font-size: 24rpx;
   margin-bottom: 8rpx;
+
 }
 
 .role-name {
+
   display: block;
   color: white;
   font-size: 36rpx;
   font-weight: bold;
+
 }
 
 .desc {
+
   padding: 15rpx 0;
   color: #666;
   font-size: 24rpx;
+
 }
 
 .menu-grid {
+
   display: flex;
   flex-wrap: wrap;
   gap: 16rpx;
+
 }
 
 .menu-item {
+
   width: calc(50% - 8rpx);
   background: white;
   border-radius: 12rpx;
   padding: 24rpx 16rpx;
   text-align: center;
   box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+
 }
 
-.menu-item:active { transform: scale(0.98); }
+.menu-item:active {
+ transform: scale(0.98); 
+}
 
-.menu-icon { font-size: 44rpx; margin-bottom: 10rpx; }
+.menu-icon {
+ font-size: 44rpx; margin-bottom: 10rpx; 
+}
 
-.menu-name { font-size: 24rpx; color: #333; }
+.menu-name {
+ font-size: 24rpx; color: #333; 
+}

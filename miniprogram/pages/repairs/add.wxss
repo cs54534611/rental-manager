@@ -1,48 +1,69 @@
 /* miniprogram/pages/repairs/add.wxss */
-page { background: #f5f7fa; }
-.container { padding: 30rpx; }
+page {
+ background: #f5f7fa; 
+}
+.container {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+ padding: 30rpx;
+}
 
 .form-section {
+
   background: white;
   border-radius: 16rpx;
   padding: 30rpx;
   margin-bottom: 20rpx;
+
 }
 
 .form-title {
+
   font-size: 30rpx;
   font-weight: 600;
   color: #333;
   margin-bottom: 20rpx;
+
 }
 
 .form-item {
+
   display: flex;
   align-items: center;
   padding: 24rpx 0;
   border-bottom: 1rpx solid #f5f5f5;
-}
-.form-item:last-child { border-bottom: none; }
 
-.label { width: 180rpx; font-size: 28rpx; color: #333; }
+}
+.form-item:last-child {
+ border-bottom: none; 
+}
+
+.label {
+ width: 180rpx; font-size: 28rpx; color: #333; 
+}
 
 .picker {
+
   flex: 1;
   font-size: 28rpx;
   text-align: right;
   color: #333;
+
 }
 
 .textarea {
+
   width: 100%;
   height: 200rpx;
   font-size: 28rpx;
   border: 1rpx solid #eee;
   border-radius: 8rpx;
   padding: 20rpx;
+
 }
 
 .submit-btn {
+
   width: 100%;
   height: 88rpx;
   background: linear-gradient(135deg, #667eea, #764ba2);
@@ -53,26 +74,34 @@ page { background: #f5f7fa; }
   align-items: center;
   justify-content: center;
   margin-top: 40rpx;
+
 }
 
 /* 照片上传样式 */
 .photo-grid {
+
   display: flex;
   flex-wrap: wrap;
   gap: 16rpx;
+
 }
 
 .photo-item {
+
   width: 150rpx;
   height: 150rpx;
   position: relative;
   border-radius: 8rpx;
   overflow: hidden;
+
 }
 
-.photo-item image { width: 100%; height: 100%; }
+.photo-item image {
+ width: 100%; height: 100%; 
+}
 
 .photo-delete {
+
   position: absolute;
   top: 4rpx;
   right: 4rpx;
@@ -85,9 +114,11 @@ page { background: #f5f7fa; }
   display: flex;
   align-items: center;
   justify-content: center;
+
 }
 
 .photo-add {
+
   width: 150rpx;
   height: 150rpx;
   border: 2rpx dashed #ddd;
@@ -95,6 +126,9 @@ page { background: #f5f7fa; }
   display: flex;
   align-items: center;
   justify-content: center;
+
 }
 
-.photo-add text { font-size: 60rpx; color: #ccc; }
+.photo-add text {
+ font-size: 60rpx; color: #ccc; 
+}

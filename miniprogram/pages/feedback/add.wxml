@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="section">
+    <view class="section-title">反馈类型</view>
+    <radio-group bindchange="onTypeChange">
+      <view class="type-list">
+        <label wx:for="{{types}}" wx:key="value" class="type-item {{type === item.value ? 'active' : ''}}">
+          <radio value="{{item.value}}" checked="{{type === item.value}}"/>
+          <text>{{item.label}}</text>
+        </label>
+      </view>
+    </radio-group>
+  </view>
+
+  <view class="section">
+    <view class="section-title">反馈内容</view>
+    <textarea class="textarea" placeholder="请详细描述您的问题或建议..." value="{{content}}" bindinput="onContentInput" maxlength="500"/>
+    <view class="char-count">{{content.length}}/500</view>
+  </view>
+
+  <button class="submit-btn" bindtap="onSubmit">提交反馈</button>
+</view>

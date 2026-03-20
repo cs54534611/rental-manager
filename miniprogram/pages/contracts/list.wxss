@@ -1,63 +1,106 @@
 /* miniprogram/pages/contracts/list.wxss */
-page { background: #f5f7fa; }
-.container { padding: 20rpx; }
+page {
+ background: #f5f7fa; 
+}
+.container {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+ padding: 20rpx;
+}
 
 .filter-bar {
+
   display: flex;
   gap: 20rpx;
   margin-bottom: 20rpx;
+
 }
 .filter-item {
+
   padding: 10rpx 30rpx;
   background: white;
   border-radius: 30rpx;
   font-size: 26rpx;
   color: #666;
+
 }
 .filter-item.active {
+
   background: #667eea;
   color: white;
+
 }
 
-.list { height: calc(100vh - 200rpx); }
+.list {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+ height: calc(100vh - 200rpx);
+}
 
 .item {
+
   background: white;
   border-radius: 16rpx;
   padding: 24rpx;
   margin-bottom: 20rpx;
+
 }
 
 .item-header {
+
   display: flex;
   justify-content: space-between;
   margin-bottom: 16rpx;
+
 }
-.no { font-size: 28rpx; font-weight: 600; color: #333; }
-.status { font-size: 24rpx; padding: 4rpx 12rpx; border-radius: 6rpx; }
-.status[status="1"] { background: #d1fae5; color: #059669; }
-.status[status="0"] { background: #f3f4f6; color: #6b7280; }
+.no {
+ font-size: 28rpx; font-weight: 600; color: #333; 
+}
+.status {
+ font-size: 24rpx; padding: 4rpx 12rpx; border-radius: 6rpx; 
+}
+.status[status="1"] {
+ background: #d1fae5; color: #059669; 
+}
+.status[status="0"] {
+ background: #f3f4f6; color: #6b7280; 
+}
 
 .item-body .row {
+
   display: flex;
   margin-bottom: 10rpx;
+
 }
-.item-body .label { font-size: 26rpx; color: #999; width: 120rpx; }
-.item-body .value { font-size: 26rpx; color: #333; flex: 1; }
+.item-body .label {
+ font-size: 26rpx; color: #999; width: 120rpx; 
+}
+.item-body .value {
+ font-size: 26rpx; color: #333; flex: 1; 
+}
 
 .item-footer {
+
   display: flex;
   justify-content: space-between;
   margin-top: 16rpx;
   padding-top: 16rpx;
   border-top: 1rpx solid #f0f0f0;
-}
-.rent { font-size: 32rpx; font-weight: bold; color: #667eea; }
-.method { font-size: 24rpx; color: #999; }
 
-.empty { text-align: center; padding: 100rpx; color: #999; }
+}
+.rent {
+ font-size: 32rpx; font-weight: bold; color: #667eea; 
+}
+.method {
+ font-size: 24rpx; color: #999; 
+}
+
+.empty {
+ text-align: center; padding: 100rpx; color: #999; 
+}
 
 .add-btn {
+
   position: fixed;
   bottom: 140rpx;
   left: 50%;
@@ -73,4 +116,5 @@ page { background: #f5f7fa; }
   font-size: 28rpx;
   box-shadow: 0 4rpx 20rpx rgba(102, 126, 234, 0.4);
   z-index: 100;
+
 }

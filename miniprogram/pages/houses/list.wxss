@@ -1,44 +1,65 @@
 /* miniprogram/pages/houses/list.wxss */
-page { background: #f5f7fa; }
-.container { padding: 20rpx; }
+page {
+ background: #f5f7fa; 
+}
+.container {
+  padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+ padding: 20rpx;
+}
 
 .search-bar {
+
   display: flex;
   background: white;
   border-radius: 12rpx;
   padding: 20rpx;
   margin-bottom: 20rpx;
+
 }
 .search-bar input {
+
   flex: 1;
   font-size: 28rpx;
+
 }
 .search-btn {
+
   color: #667eea;
   font-size: 28rpx;
   padding-left: 20rpx;
+
 }
 
 .filter-bar {
+
   display: flex;
   gap: 20rpx;
   margin-bottom: 20rpx;
+
 }
 .filter-item {
+
   padding: 10rpx 30rpx;
   background: white;
   border-radius: 30rpx;
   font-size: 26rpx;
   color: #666;
+
 }
 .filter-item.active {
+
   background: #667eea;
   color: white;
+
 }
 
-.house-list { height: calc(100vh - 300rpx); }
+.house-list {
+ height: calc(100vh - 300rpx); 
+}
 
 .tenant-tip {
+
   background: #e8f4ff;
   color: #1677ff;
   padding: 20rpx;
@@ -46,75 +67,105 @@ page { background: #f5f7fa; }
   margin-bottom: 20rpx;
   text-align: center;
   font-size: 28rpx;
+
 }
 
 .house-item {
+
   display: flex;
   background: white;
   border-radius: 16rpx;
   padding: 20rpx;
   margin-bottom: 20rpx;
+
 }
 .house-img {
+
   width: 180rpx;
   height: 140rpx;
   border-radius: 12rpx;
   background: #eee;
+
 }
 .house-info {
+
   flex: 1;
   margin-left: 20rpx;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
 }
 .house-header {
+
   display: flex;
   justify-content: space-between;
+
 }
 .house-address {
+
   font-size: 28rpx;
   font-weight: 600;
   color: #333;
+
 }
 .house-status {
+
   font-size: 22rpx;
   padding: 4rpx 12rpx;
   border-radius: 6rpx;
+
 }
-.house-status[status="0"] { background: #fee2e2; color: #dc2626; }
-.house-status[status="1"] { background: #d1fae5; color: #059669; }
-.house-status[status="2"] { background: #fef3c7; color: #d97706; }
+.house-status[status="0"] {
+ background: #fee2e2; color: #dc2626; 
+}
+.house-status[status="1"] {
+ background: #d1fae5; color: #059669; 
+}
+.house-status[status="2"] {
+ background: #fef3c7; color: #d97706; 
+}
 
 .house-detail {
+
   display: flex;
   gap: 20rpx;
   font-size: 24rpx;
   color: #666;
+
 }
 
 .house-footer {
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
 }
 .house-rent {
+
   font-size: 32rpx;
   font-weight: bold;
   color: #667eea;
+
 }
 .house-floor {
+
   font-size: 24rpx;
   color: #999;
+
 }
 
 .empty {
+
   text-align: center;
   padding: 100rpx;
   color: #999;
+
 }
 
 .add-btn {
+
   position: fixed;
   bottom: 40rpx;
   left: 50%;
@@ -129,4 +180,5 @@ page { background: #f5f7fa; }
   justify-content: center;
   font-size: 28rpx;
   box-shadow: 0 10rpx 30rpx rgba(102,126,234,0.4);
+
 }
